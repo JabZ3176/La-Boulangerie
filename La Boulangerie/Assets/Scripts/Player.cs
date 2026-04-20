@@ -33,11 +33,9 @@ public class Player : MonoBehaviour
     public GameObject container;
     public DeathMenu deathMenu;
 
-    // Private references
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
 
-    // State tracking
     private bool isGrounded;
     private bool isJumping;
     private bool isSprinting;

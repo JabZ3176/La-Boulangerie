@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameManager.Instance.CollectItem(itemName);
-            Destroy(gameObject); 
+            Destroy(gameObject);
+        }
     }
 }

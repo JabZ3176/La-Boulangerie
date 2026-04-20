@@ -33,7 +33,8 @@ public class GameManager : MonoBehaviour
         {
             GameObject entry = Instantiate(itemEntryPrefab, itemListParent);
             entry.GetComponentInChildren<TextMeshProUGUI>().text = "[ ] " + itemName;
-            entry.name = itemName; 
+            entry.name = itemName;
+        }
     }
 
     public void CollectItem(string itemName)
