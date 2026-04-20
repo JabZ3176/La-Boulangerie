@@ -5,27 +5,26 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; // lets other scripts find this easily
-
+    public static GameManager Instance; 
     [Header("Items")]
-    public List<string> itemsToCollect = new List<string>(); // fill this in the Inspector
+    public List<string> itemsToCollect = new List<string>(); 
     private List<string> collectedItems = new List<string>();
 
     [Header("UI")]
-    public Transform itemListParent;   // the panel that holds the list
-    public GameObject itemEntryPrefab; // a Text prefab for each list row
+    public Transform itemListParent;   
+    public GameObject itemEntryPrefab; 
 
     [Header("Door")]
-    public Door door; // drag your Door object here in the Inspector
+    public Door door; 
 
     void Awake()
     {
-        Instance = this; // make this accessible from anywhere
+        Instance = this; 
     }
 
     void Start()
     {
-        BuildItemList(); // draw the checklist when the game starts
+        BuildItemList(); 
     }
 
     void BuildItemList()
@@ -34,26 +33,24 @@ public class GameManager : MonoBehaviour
         {
             GameObject entry = Instantiate(itemEntryPrefab, itemListParent);
             entry.GetComponentInChildren<TextMeshProUGUI>().text = "[ ] " + itemName;
-            entry.name = itemName; // name it so we can find it later
-        }
+            entry.name = itemName; 
     }
 
     public void CollectItem(string itemName)
     {
-        if (collectedItems.Contains(itemName)) return; // don't collect twice
+        if (collectedItems.Contains(itemName)) return; 
 
         collectedItems.Add(itemName);
         UpdateItemInList(itemName);
 
         if (collectedItems.Count >= itemsToCollect.Count)
         {
-            door.Unlock(); // all items collected — open the door!
+            door.Unlock(); 
         }
     }
 
     void UpdateItemInList(string itemName)
     {
-        // Find the matching row in the UI and tick it off
         Transform entry = itemListParent.Find(itemName);
         if (entry != null)
         {

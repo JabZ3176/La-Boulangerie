@@ -10,21 +10,15 @@ public class Player : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 5f;
-    public float sprintSpeed = 9f;              // Speed while sprinting
+    public float sprintSpeed = 9f;              
     public float jumpForce = 10f;
     public float jumpCutMultiplier = 0.5f;
 
     [Header("Baguette Energy Meter")]
     public float maxBaguetteEnergy = 100f;
-    public float baguetteDrainRate = 20f;       // Energy lost per second while sprinting
-    public float baguetteRechargeRate = 10f;    // Energy gained per second while not sprinting
-    public float baguetteMinToSprint = 10f;     // Minimum energy required to start a sprint
-
-    [Header("Power Slam")]
-    public float slamForce = 20f;               // Downward force applied during the slam
-    public float slamStunDuration = 2f;         // How long enemies stay stunned after being hit
-    public float slamHitRadius = 1.5f;          // Radius of the slam impact zone below the player
-    public LayerMask enemyLayer;                // Set this to your enemy layer in the Inspector
+    public float baguetteDrainRate = 20f;       
+    public float baguetteRechargeRate = 10f;    
+    public float baguetteMinToSprint = 10f;     
 
     [Header("Ground Detection")]
     public Transform groundCheck;
@@ -33,10 +27,7 @@ public class Player : MonoBehaviour
 
     [Header("UI")]
     public Image healthImage;
-    public Image baguetteEnergyImage;           // Assign your energy bar Image here in the Inspector
-
-    [Header("Combat")]
-    public float stunDuration = 1.5f;       // How long the enemy is stunned when the player touches it
+    public Image baguetteEnergyImage;                
 
     [Header("References")]
     public GameObject container;
@@ -50,10 +41,10 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private bool isJumping;
     private bool isSprinting;
-    private bool isSlamming;                    // True while the slam is in progress
-    private bool hasDoubleJump;                 // Whether the player currently has a double jump available
-    private bool canDoubleJump;                 // Whether double jump is unlocked (true from Level2 onwards)
-    private float currentBaguetteEnergy;        // Current energy value
+    private bool isSlamming;                    
+    private bool hasDoubleJump;                 
+    private bool canDoubleJump;                 
+    private float currentBaguetteEnergy;        
 
     private const int MaxHealth = 3;
     private const string DamageTag = "Damage";
@@ -61,17 +52,14 @@ public class Player : MonoBehaviour
     private const string StartScene = "Level1";
     private const string DoubleJumpScene = "Level2";
 
-    // -------------------------------------------------------------------------
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Start with a full baguette
         currentBaguetteEnergy = maxBaguetteEnergy;
 
-        // Unlock double jump if we're in Level2 or beyond
         string currentScene = SceneManager.GetActiveScene().name;
         canDoubleJump = (currentScene == DoubleJumpScene);
     }
@@ -91,14 +79,12 @@ public class Player : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
 
-        // Restore the double jump charge whenever the player lands normally
         if (!wasGrounded && isGrounded)
         {
             hasDoubleJump = canDoubleJump;
         }
     }
 
-    // -------------------------------------------------------------------------
 
     private void HandleSprint()
     {
@@ -106,14 +92,12 @@ public class Player : MonoBehaviour
 
         if (shiftHeld && currentBaguetteEnergy >= baguetteMinToSprint)
         {
-            // Drain the baguette while sprinting
             isSprinting = true;
             currentBaguetteEnergy -= baguetteDrainRate * Time.deltaTime;
             currentBaguetteEnergy = Mathf.Max(currentBaguetteEnergy, 0f);
         }
         else
         {
-            // Recharge the baguette while not sprinting
             isSprinting = false;
             currentBaguetteEnergy += baguetteRechargeRate * Time.deltaTime;
             currentBaguetteEnergy = Mathf.Min(currentBaguetteEnergy, maxBaguetteEnergy);
@@ -122,7 +106,6 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        // Freeze horizontal movement during a slam so the player drops straight down
         if (isSlamming) return;
 
         float moveInput = Input.GetAxis("Horizontal");
@@ -132,25 +115,21 @@ public class Player : MonoBehaviour
 
     private void HandleJump()
     {
-        // Prevent jumping or double jumping while a slam is active
         if (isSlamming) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isGrounded)
             {
-                // Normal jump from the ground
                 PerformJump();
             }
             else if (hasDoubleJump)
             {
-                // Mid-air double jump — consume the charge
                 PerformJump();
                 hasDoubleJump = false;
             }
         }
 
-        // Cut the jump short if Space is released early (variable jump height)
         if (Input.GetKeyUp(KeyCode.Space) && isJumping)
         {
             if (rb.linearVelocity.y > 0)
@@ -179,7 +158,6 @@ public class Player : MonoBehaviour
         baguetteEnergyImage.fillAmount = currentBaguetteEnergy / maxBaguetteEnergy;
     }
 
-    // -------------------------------------------------------------------------
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -193,7 +171,6 @@ public class Player : MonoBehaviour
     {
         health -= 1;
 
-        // Knock the player upward on hit
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
         StartCoroutine(BlinkRed());
