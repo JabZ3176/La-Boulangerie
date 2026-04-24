@@ -8,7 +8,7 @@ public class DeathMenu : MonoBehaviour
     public void ToggleDeathScreen()
     {
         deathScreenUI.SetActive(true);
-        Time.timeScale = 0f; 
+        Time.timeScale = 0; 
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -16,13 +16,13 @@ public class DeathMenu : MonoBehaviour
 
     public void Respawn()
     {
-        Time.timeScale = 1f; 
+        Time.timeScale = 1; 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
 }

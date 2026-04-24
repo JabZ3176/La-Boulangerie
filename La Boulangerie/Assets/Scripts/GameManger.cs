@@ -1,30 +1,36 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; 
+    public static GameManager Instance;
+
     [Header("Items")]
-    public List<string> itemsToCollect = new List<string>(); 
+    public List<string> itemsToCollect = new List<string>();
     private List<string> collectedItems = new List<string>();
 
     [Header("UI")]
-    public Transform itemListParent;   
-    public GameObject itemEntryPrefab; 
+    public Transform itemListParent;
+    public GameObject itemEntryPrefab;
+
+    [Header("Unlock Screen")]
+    public GameObject unlockPanel;
 
     [Header("Door")]
-    public Door door; 
+    public Door door;
 
     void Awake()
     {
-        Instance = this; 
+        Instance = this;
     }
 
     void Start()
     {
-        BuildItemList(); 
+        BuildItemList();
+
+        if (unlockPanel != null)
+            unlockPanel.SetActive(false);
     }
 
     void BuildItemList()
@@ -39,14 +45,15 @@ public class GameManager : MonoBehaviour
 
     public void CollectItem(string itemName)
     {
-        if (collectedItems.Contains(itemName)) return; 
+        if (collectedItems.Contains(itemName)) return;
 
         collectedItems.Add(itemName);
         UpdateItemInList(itemName);
 
         if (collectedItems.Count >= itemsToCollect.Count)
         {
-            door.Unlock(); 
+            door.Unlock();
+            ShowUnlockScreen();
         }
     }
 
@@ -57,5 +64,11 @@ public class GameManager : MonoBehaviour
         {
             entry.GetComponentInChildren<TextMeshProUGUI>().text = "[X] " + itemName;
         }
+    }
+
+    void ShowUnlockScreen()
+    {
+        if (unlockPanel != null)
+            unlockPanel.SetActive(true);
     }
 }

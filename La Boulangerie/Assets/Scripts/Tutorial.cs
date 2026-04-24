@@ -6,7 +6,17 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        
+        if (PlayerPrefs.GetInt("ShowTutorial", 0) == 1)
+        {
+            container.SetActive(true);
+            Time.timeScale = 0;
+            PlayerPrefs.SetInt("ShowTutorial", 0); 
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            container.SetActive(false);
+        }
     }
 
     void Update()
