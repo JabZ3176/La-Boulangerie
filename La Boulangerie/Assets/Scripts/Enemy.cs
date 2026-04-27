@@ -8,13 +8,13 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     [Header("Patrol")]
     public float speed = 2f;        // how fast the enemy moves between patrol points
-    public Transform[] points;      // the two (or more) patrol points in the scene
+    public Transform[] points;      // the two or more patrol points set in the Inspector
 
     // ─────────────────────────────────────────────
     // STATS
     // ─────────────────────────────────────────────
     [Header("Stats")]
-    public int maxHealth = 3;       // how many hits the enemy can take
+    public int maxHealth = 3;       // how many hits the enemy can take before dying
     private int currentHealth;      // tracks current health during gameplay
     private bool isDead = false;    // stops death from firing more than once
 
@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     [Header("Damage")]
     public int damageAmount = 1;        // how much damage the enemy deals to the player
-    public float damageCooldown = 1f;   // seconds between each hit so it doesnt hit every frame
+    public float damageCooldown = 1f;   // seconds between each hit so it doesnt fire every frame
     private float lastDamageTime = -1f; // tracks when the enemy last dealt damage
 
     // ─────────────────────────────────────────────
@@ -38,6 +38,7 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     private int i;                          // current patrol point index
     private SpriteRenderer spriteRenderer;  // the enemy's sprite renderer
+    private Color originalColor;            // stores the original sprite color to return to after effects
 
     // ─────────────────────────────────────────────
     // START — runs once when the scene loads
@@ -45,7 +46,12 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        currentHealth = maxHealth; // set health to full at the start
+
+        // save the original color so we always return to it after flashing
+        originalColor = spriteRenderer.color;
+
+        // set health to full at the start
+        currentHealth = maxHealth;
     }
 
     // ─────────────────────────────────────────────
@@ -89,7 +95,7 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // when the player first touches the enemy
+        // when the player first touches the enemy deal damage
         if (other.CompareTag("Player"))
         {
             DealDamageToPlayer(other.gameObject);
@@ -99,7 +105,7 @@ public class Enemy : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         // while the player stays in contact keep trying to deal damage
-        // the cooldown inside DealDamageToPlayer prevents it hitting every frame
+        // the cooldown inside DealDamageToPlayer stops it hitting every frame
         if (other.CompareTag("Player"))
         {
             DealDamageToPlayer(other.gameObject);
@@ -125,7 +131,7 @@ public class Enemy : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────
-    // STUN — called from Player.cs after a slam
+    // STUN — called from Player.cs after a successful slam
     // ─────────────────────────────────────────────
     public void Stun()
     {
@@ -138,10 +144,10 @@ public class Enemy : MonoBehaviour
         isStunned = true;
         spriteRenderer.color = Color.yellow; // flash yellow to show the enemy is stunned
 
-        yield return new WaitForSeconds(stunDuration); // wait for stun to wear off
+        yield return new WaitForSeconds(stunDuration); // wait for the stun to wear off
 
         isStunned = false;
-        spriteRenderer.color = Color.white; // return to normal color
+        spriteRenderer.color = originalColor; // return to the original sprite color
     }
 
     // ─────────────────────────────────────────────
@@ -166,8 +172,8 @@ public class Enemy : MonoBehaviour
         spriteRenderer.color = Color.red;   // flash red when hit
         yield return new WaitForSeconds(0.1f);
 
-        // return to yellow if still stunned, otherwise return to normal
-        spriteRenderer.color = isStunned ? Color.yellow : Color.white;
+        // if still stunned return to yellow, otherwise return to the original color
+        spriteRenderer.color = isStunned ? Color.yellow : originalColor;
     }
 
     // ─────────────────────────────────────────────
@@ -178,7 +184,7 @@ public class Enemy : MonoBehaviour
         isDead = true;
         StopAllCoroutines(); // stop any running flashes or stuns
 
-        // destroy the enemy after a tiny delay so the hit flash has time to play
+        // small delay before destroying so the hit flash has time to show
         Destroy(gameObject, 0.2f);
     }
 }

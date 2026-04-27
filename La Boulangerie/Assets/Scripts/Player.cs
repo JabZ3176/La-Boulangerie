@@ -11,24 +11,25 @@ public class Player : MonoBehaviour
     [Header("Stats")]
     public int health = 3;              // how many hits the player can take
     private bool isDead = false;        // stops death from firing more than once
+    private bool isInvincible = false;  // true during a slam so player cant take damage
 
     // ─────────────────────────────────────────────
     // MOVEMENT
     // ─────────────────────────────────────────────
     [Header("Movement")]
-    public float moveSpeed = 5f;        // normal walking speed
-    public float sprintSpeed = 9f;      // speed when holding shift
-    public float jumpForce = 10f;       // how high the player jumps
-    public float jumpCutMultiplier = 0.5f; // reduces jump height if space released early
+    public float moveSpeed = 5f;            // normal walking speed
+    public float sprintSpeed = 9f;          // speed when holding shift
+    public float jumpForce = 10f;           // how high the player jumps
+    public float jumpCutMultiplier = 0.5f;  // reduces jump height if space released early
 
     // ─────────────────────────────────────────────
     // SLAM
     // ─────────────────────────────────────────────
     [Header("Slam")]
-    public float slamForce = 20f;           // how fast the player slams downward
-    public float slamBounceForce = 8f;      // how high the player bounces after a slam
-    public float slamRadius = 0.5f;         // how wide the hit detection is below the player
-    public LayerMask enemyLayer;            // set this to your Enemy layer in the Inspector
+    public float slamForce = 20f;       // how fast the player slams downward
+    public float slamBounceForce = 8f;  // how high the player bounces after a slam
+    public float slamRadius = 0.5f;     // how wide the hit detection is below the player
+    public LayerMask enemyLayer;        // set this to your Enemy layer in the Inspector
 
     // ─────────────────────────────────────────────
     // BAGUETTE ENERGY
@@ -58,8 +59,8 @@ public class Player : MonoBehaviour
     // REFERENCES
     // ─────────────────────────────────────────────
     [Header("References")]
-    public GameObject container;        // any UI container if needed
-    public DeathMenu deathMenu;         // reference to the death menu script
+    public GameObject container;    // any UI container if needed
+    public DeathMenu deathMenu;     // reference to the death menu script
 
     // ─────────────────────────────────────────────
     // PRIVATE VARIABLES
@@ -96,14 +97,14 @@ public class Player : MonoBehaviour
         // save the original sprite color so we can return to it after flashing
         originalColor = spriteRenderer.color;
 
-        // fill the baguette energy to max at the start
+        // fill baguette energy to max at the start
         currentBaguetteEnergy = maxBaguetteEnergy;
 
         // check which scene we are in and set up accordingly
         string currentScene = SceneManager.GetActiveScene().name;
         canDoubleJump = (currentScene == DoubleJumpScene);
 
-        // set the kill height based on the current scene
+        // set the kill height per scene so falling off works in every level
         if (currentScene == "Level1") killHeight = -10f;
         else if (currentScene == "Level2") killHeight = -20f;
         else if (currentScene == "Level3") killHeight = -30f;
@@ -117,11 +118,11 @@ public class Player : MonoBehaviour
         HandleSprint();
         HandleMovement();
         HandleJump();
-        HandleSlam();      // check for slam input every frame
+        HandleSlam();       // check for slam input every frame
         UpdateHealthUI();
         UpdateBaguetteUI();
 
-        // kill the player if they fall below the kill height
+        // kill the player if they fall below the kill height for this scene
         if (transform.position.y < killHeight)
         {
             Die();
@@ -135,19 +136,19 @@ public class Player : MonoBehaviour
     {
         bool wasGrounded = isGrounded;
 
-        // draw a small circle at the player's feet to check if they are on the ground
+        // draw a small circle at the player's feet to check if touching the ground
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,
             groundLayer
         );
 
-        // when the player lands restore double jump if unlocked
+        // when the player lands restore the double jump if unlocked
         if (!wasGrounded && isGrounded)
         {
             hasDoubleJump = canDoubleJump;
 
-            // if we were slamming and just landed, stop the slam
+            // if we were slamming and just landed stop the slam state
             if (isSlamming)
             {
                 isSlamming = false;
@@ -183,7 +184,7 @@ public class Player : MonoBehaviour
     // ─────────────────────────────────────────────
     private void HandleMovement()
     {
-        // dont allow movement control during a slam
+        // dont allow movement control while slamming
         if (isSlamming) return;
 
         float moveInput = Input.GetAxis("Horizontal");
@@ -198,7 +199,7 @@ public class Player : MonoBehaviour
     // ─────────────────────────────────────────────
     private void HandleJump()
     {
-        // dont allow jumping during a slam
+        // dont allow jumping while slamming
         if (isSlamming) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -214,7 +215,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        // if space is released early, cut the jump short
+        // if space is released early cut the jump short for better game feel
         if (Input.GetKeyUp(KeyCode.Space) && isJumping)
         {
             if (rb.linearVelocity.y > 0)
@@ -240,9 +241,7 @@ public class Player : MonoBehaviour
     private void HandleSlam()
     {
         // slam can only be performed when:
-        // - the player is in the air (not grounded)
-        // - not already slamming
-        // - pressing S or down arrow
+        // the player is in the air, not already slamming, and presses S or down arrow
         bool slamKeyPressed = Input.GetKeyDown(KeyCode.S) ||
                               Input.GetKeyDown(KeyCode.DownArrow);
 
@@ -255,38 +254,50 @@ public class Player : MonoBehaviour
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
+        isInvincible = true; // player cant take damage during a slam
 
-        // slam straight down by overriding vertical velocity
+        // force the player straight down at slam speed
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slamForce);
 
-        // wait until the player hits the ground before checking for enemies
+        // wait until the player touches the ground before checking for enemies
         yield return new WaitUntil(() => isGrounded);
 
-        // once landed check for enemies directly below using a circle overlap
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
-            groundCheck.position, // check from the player's feet
+        // check for any enemy colliders within the slam radius at the player's feet
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
+            groundCheck.position,
             slamRadius,
-            enemyLayer            // only detect objects on the enemy layer
+            enemyLayer
         );
 
-        // if any enemies were found underneath, hit them all
-        if (hitEnemies.Length > 0)
-        {
-            foreach (Collider2D enemyCollider in hitEnemies)
-            {
-                Enemy enemy = enemyCollider.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                    enemy.TakeDamage(1); // deal 1 damage to the enemy
-                    enemy.Stun();        // stun the enemy temporarily
-                }
-            }
+        bool hitEnemy = false;
 
-            // bounce the player upward after a successful slam on an enemy
+        foreach (Collider2D col in hitColliders)
+        {
+            // skip the physical blocker collider — only process trigger colliders
+            // this ensures we hit the right collider on the enemy
+            if (!col.isTrigger) continue;
+
+            Enemy enemy = col.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(1); // deal 1 damage to the enemy
+                enemy.Stun();        // stun the enemy temporarily
+                hitEnemy = true;
+            }
+        }
+
+        // only bounce if we actually hit an enemy
+        if (hitEnemy)
+        {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
         }
 
         isSlamming = false;
+
+        // brief grace period after landing so OnTriggerStay
+        // doesnt immediately deal damage to the player
+        yield return new WaitForSeconds(0.2f);
+        isInvincible = false;
     }
 
     // ─────────────────────────────────────────────
@@ -317,8 +328,8 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
-        // dont take damage if already dead
-        if (isDead) return;
+        // dont take damage if already dead or currently invincible during a slam
+        if (isDead || isInvincible) return;
 
         health -= 1;
 
@@ -336,14 +347,14 @@ public class Player : MonoBehaviour
 
     private IEnumerator BlinkRed()
     {
-        spriteRenderer.color = Color.red;           // flash red
+        spriteRenderer.color = Color.red;       // flash red
         yield return new WaitForSeconds(0.1f);
-        spriteRenderer.color = originalColor;       // return to original color
+        spriteRenderer.color = originalColor;   // return to original color
     }
 
     private void Die()
     {
-        // guard so die can only run once even if called multiple times
+        // guard so die can only ever run once even if called multiple times
         if (isDead) return;
         isDead = true;
         deathMenu.ToggleDeathScreen();

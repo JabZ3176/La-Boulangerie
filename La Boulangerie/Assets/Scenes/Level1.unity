@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 398627045}
   - component: {fileID: 398627044}
   - component: {fileID: 398627048}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -428,10 +428,10 @@ MonoBehaviour:
   jumpCutMultiplier: 0.5
   slamForce: 15
   slamBounceForce: 10
-  slamRadius: 0.5
+  slamRadius: 0.9
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   maxBaguetteEnergy: 100
   baguetteDrainRate: 20
   baguetteRechargeRate: 10
@@ -470,7 +470,7 @@ Transform:
   m_GameObject: {fileID: 505034895}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.482, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4008,6 +4008,7 @@ GameObject:
   - component: {fileID: 1206351217}
   - component: {fileID: 1206351216}
   - component: {fileID: 1206351219}
+  - component: {fileID: 1206351220}
   m_Layer: 7
   m_Name: Actual Enemy
   m_TagString: Untagged
@@ -4060,7 +4061,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -4182,6 +4183,43 @@ MonoBehaviour:
   stunDuration: 2
   damageAmount: 1
   damageCooldown: 1
+--- !u!70 &1206351220
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206351214}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: af94655361fd2774499317db15422a04, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!1 &1254773625
 GameObject:
   m_ObjectHideFlags: 0
@@ -5099,6 +5137,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1962134186821750627, guid: 3f2ed4d16d17ac8498cbe769d99ae133, type: 3}
+      propertyPath: nextLevelValue
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7277452085163117116, guid: 3f2ed4d16d17ac8498cbe769d99ae133, type: 3}
       propertyPath: m_LocalPosition.x
       value: 37.93
@@ -5178,9 +5220,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3008809203155874860, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 960
+      objectReference: {fileID: 0}
+    - target: {fileID: 3166270118355008499, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -540
+      objectReference: {fileID: 0}
     - target: {fileID: 4680490046682901900, guid: faa3629100598f542b4f240467bf3c79, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5222702437813995418, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6085413853447159365, guid: faa3629100598f542b4f240467bf3c79, type: 3}
       propertyPath: m_Pivot.x
@@ -5260,6 +5334,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6085413853447159365, guid: faa3629100598f542b4f240467bf3c79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6864101346072164551, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -3,11 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
-    public string nextSceneName; 
+    public string nextSceneName;
+    public int nextLevelValue;
     private bool isUnlocked = false;
 
     public void Unlock()
     {
+        PlayerPrefs.SetInt("LevelReached", nextLevelValue);
         isUnlocked = true;
         Debug.Log("Door unlocked! Walk through to proceed.");
     }
