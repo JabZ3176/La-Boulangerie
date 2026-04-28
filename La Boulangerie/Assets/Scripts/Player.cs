@@ -59,7 +59,6 @@ public class Player : MonoBehaviour
     // REFERENCES
     // ─────────────────────────────────────────────
     [Header("References")]
-    public GameObject container;    // any UI container if needed
     public DeathMenu deathMenu;     // reference to the death menu script
 
     // ─────────────────────────────────────────────

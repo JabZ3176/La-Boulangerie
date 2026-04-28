@@ -9,13 +9,12 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        // if there is no saved level, grey out the continue button
-        // the default is empty string "" if nothing has been saved yet
+        // if there is no saved level grey out the continue button
         if (PlayerPrefs.GetString("CurrentLevel", "") == "")
         {
             continueButton.interactable = false;
 
-            // optionally fade the text so it looks locked
+            // fade the text so it looks locked
             TMPro.TextMeshProUGUI label = continueButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (label != null)
             {
@@ -33,6 +32,8 @@ public class MainMenu : MonoBehaviour
         // wipe all saved progress so everything starts fresh
         PlayerPrefs.DeleteKey("CurrentLevel");
         PlayerPrefs.DeleteKey("LevelReached");
+
+        // set ShowTutorial to 1 so Tutorial.cs knows to show it
         PlayerPrefs.SetInt("ShowTutorial", 1);
         PlayerPrefs.Save();
 
@@ -42,7 +43,10 @@ public class MainMenu : MonoBehaviour
 
     public void ContinueGame()
     {
-        // load whatever level the player was last on
+        // make sure tutorial never shows when continuing
+        PlayerPrefs.SetInt("ShowTutorial", 0);
+        PlayerPrefs.Save();
+
         string savedLevel = PlayerPrefs.GetString("CurrentLevel", "Level1");
         Time.timeScale = 1;
         SceneManager.LoadScene(savedLevel);

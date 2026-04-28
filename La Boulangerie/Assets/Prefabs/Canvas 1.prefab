@@ -503,7 +503,6 @@ GameObject:
   - component: {fileID: 2697033401915646652}
   - component: {fileID: 1434162656953305673}
   - component: {fileID: 5674326745676810037}
-  - component: {fileID: 6163085977216446897}
   m_Layer: 5
   m_Name: TutorialUI
   m_TagString: Untagged
@@ -571,19 +570,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6163085977216446897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030111868019783540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79c0405737859be4e9d986577bad8f34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tutorial
-  container: {fileID: 5222702437813995418}
 --- !u!1 &2111478588419859289
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,10 +1917,10 @@ RectTransform:
   - {fileID: 1022542575987900699}
   - {fileID: 107553311268140691}
   - {fileID: 3166270118355008499}
-  - {fileID: 6864101346072164551}
   - {fileID: 8887305741861682615}
   - {fileID: 6503250740733669448}
   - {fileID: 5151478445867811918}
+  - {fileID: 6864101346072164551}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2028,7 +2014,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5222702437813995418}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
