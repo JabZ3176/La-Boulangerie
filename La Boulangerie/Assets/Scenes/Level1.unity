@@ -428,7 +428,7 @@ MonoBehaviour:
   jumpCutMultiplier: 0.5
   slamForce: 15
   slamBounceForce: 10
-  slamRadius: 0.9
+  slamRadius: 0.1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -5251,6 +5251,14 @@ PrefabInstance:
     - target: {fileID: 4680490046682901900, guid: faa3629100598f542b4f240467bf3c79, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4858680125357151846, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1892
+      objectReference: {fileID: 0}
+    - target: {fileID: 4858680125357151846, guid: faa3629100598f542b4f240467bf3c79, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1412
       objectReference: {fileID: 0}
     - target: {fileID: 5222702437813995418, guid: faa3629100598f542b4f240467bf3c79, type: 3}
       propertyPath: m_IsActive

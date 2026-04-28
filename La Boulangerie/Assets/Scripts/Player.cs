@@ -254,15 +254,18 @@ public class Player : MonoBehaviour
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
-        isInvincible = true; // player cant take damage during a slam
+        isInvincible = true;
 
         // force the player straight down at slam speed
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slamForce);
 
-        // wait until the player touches the ground before checking for enemies
-        yield return new WaitUntil(() => isGrounded);
+        // wait until the player hits the ground OR lands on an enemy
+        yield return new WaitUntil(() =>
+            isGrounded ||
+            Physics2D.OverlapCircle(groundCheck.position, slamRadius, enemyLayer)
+        );
 
-        // check for any enemy colliders within the slam radius at the player's feet
+        // check for any enemy trigger colliders within the slam radius
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
             groundCheck.position,
             slamRadius,
@@ -273,15 +276,14 @@ public class Player : MonoBehaviour
 
         foreach (Collider2D col in hitColliders)
         {
-            // skip the physical blocker collider — only process trigger colliders
-            // this ensures we hit the right collider on the enemy
+            // skip the physical blocker — only process the trigger collider
             if (!col.isTrigger) continue;
 
             Enemy enemy = col.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(1); // deal 1 damage to the enemy
-                enemy.Stun();        // stun the enemy temporarily
+                enemy.TakeDamage(1);
+                enemy.Stun();
                 hitEnemy = true;
             }
         }
@@ -294,8 +296,7 @@ public class Player : MonoBehaviour
 
         isSlamming = false;
 
-        // brief grace period after landing so OnTriggerStay
-        // doesnt immediately deal damage to the player
+        // brief grace period so OnTriggerStay doesnt immediately deal damage
         yield return new WaitForSeconds(0.2f);
         isInvincible = false;
     }
