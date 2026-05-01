@@ -191,6 +191,16 @@ public class Player : MonoBehaviour
 
         // apply horizontal movement while keeping vertical velocity unchanged
         rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
+
+        // flip the sprite to face the direction the player is moving
+        if (moveInput > 0)
+        {
+            spriteRenderer.flipX = false; // facing right
+        }
+        else if (moveInput < 0)
+        {
+            spriteRenderer.flipX = true;  // facing left
+        }
     }
 
     // ─────────────────────────────────────────────
