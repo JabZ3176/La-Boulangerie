@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
         );
 
         // flip the sprite to face the direction of movement
-        spriteRenderer.flipX = (transform.position.x - points[i].position.x) < 0f;
+        spriteRenderer.flipX = (transform.position.x - points[i].position.x) > 0f;
     }
 
     // ─────────────────────────────────────────────
