@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d6daee1a91a0b824ba424d84c35cc95d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - slot1: {instanceID: 0}
+  - slot2: {instanceID: 0}
+  - slot3: {instanceID: 0}
+  - baguetteFull: {fileID: 37261737471476846, guid: e699cf0545505294da073bca8684f4b0, type: 3}
+  - baguetteEmpty: {fileID: -8422324730902310600, guid: 83c8a6df8d592e34ba4abd9b227219c4, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

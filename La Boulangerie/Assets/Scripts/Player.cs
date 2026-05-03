@@ -41,6 +41,19 @@ public class Player : MonoBehaviour
     public float baguetteMinToSprint = 10f;     // minimum energy needed to start sprinting
 
     // ─────────────────────────────────────────────
+    // BAGUETTE THROWING
+    // ─────────────────────────────────────────────
+    [Header("Baguette Throwing")]
+    public GameObject baguettePrefab;   // drag your baguette prefab here
+    public Transform throwPoint;        // empty object at the player's hand position
+    public float throwCooldown = 0.5f;  // seconds between throws
+    public int maxBaguettes = 3;        // maximum baguettes the player can carry
+    public BaguetteUI baguetteUI;       // drag your BaguetteUI object here
+
+    private int currentBaguettes = 0;   // how many baguettes the player currently has
+    private float lastThrowTime = -1f;  // tracks when the player last threw
+
+    // ─────────────────────────────────────────────
     // GROUND DETECTION
     // ─────────────────────────────────────────────
     [Header("Ground Detection")]
@@ -52,8 +65,15 @@ public class Player : MonoBehaviour
     // UI
     // ─────────────────────────────────────────────
     [Header("UI")]
-    public Image healthImage;           // health bar image (fill type)
-    public Image baguetteEnergyImage;   // baguette energy bar image (fill type)
+    public HeartHealthBar heartHealthBar;   // drag HealthBar object here
+    public Image baguetteEnergyImage;
+
+    // ─────────────────────────────────────────────
+    // IDLE ANIMATION
+    // ─────────────────────────────────────────────
+    private Animator animator;          // reference to the player's animator
+    private float idleTimer = 0f;       // tracks how long the player has been still
+    private float idleThreshold = 10f;  // seconds before idle bob starts
 
     // ─────────────────────────────────────────────
     // REFERENCES
@@ -89,24 +109,25 @@ public class Player : MonoBehaviour
     // ─────────────────────────────────────────────
     void Start()
     {
-        // get components attached to this GameObject
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        // save the original sprite color so we can return to it after flashing
         originalColor = spriteRenderer.color;
-
-        // fill baguette energy to max at the start
         currentBaguetteEnergy = maxBaguetteEnergy;
+        // get the animator component on the player
+        animator = GetComponent<Animator>();
 
-        // check which scene we are in and set up accordingly
         string currentScene = SceneManager.GetActiveScene().name;
         canDoubleJump = (currentScene == DoubleJumpScene);
 
-        // set the kill height per scene so falling off works in every level
         if (currentScene == "Level1") killHeight = -10f;
         else if (currentScene == "Level2") killHeight = -20f;
         else if (currentScene == "Level3") killHeight = -30f;
+
+        // show full hearts at the start
+        if (heartHealthBar != null)
+        {
+            heartHealthBar.UpdateHearts(health);
+        }
     }
 
     // ─────────────────────────────────────────────
@@ -117,11 +138,12 @@ public class Player : MonoBehaviour
         HandleSprint();
         HandleMovement();
         HandleJump();
-        HandleSlam();       // check for slam input every frame
+        HandleSlam();
+        HandleBaguetteThrow();
+        HandleIdleTimer();      // add this line
         UpdateHealthUI();
         UpdateBaguetteUI();
 
-        // kill the player if they fall below the kill height for this scene
         if (transform.position.y < killHeight)
         {
             Die();
@@ -260,6 +282,7 @@ public class Player : MonoBehaviour
         }
     }
 
+
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
@@ -311,12 +334,104 @@ public class Player : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────
+    // BAGUETTE THROW
+    // ─────────────────────────────────────────────
+    private void HandleBaguetteThrow()
+    {
+        // check for Z key press
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            // must have baguettes and cooldown must have passed
+            if (currentBaguettes > 0 &&
+                Time.time - lastThrowTime >= throwCooldown)
+            {
+                ThrowBaguette();
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // IDLE TIMER — tracks how long player has been still
+    // ─────────────────────────────────────────────
+    private void HandleIdleTimer()
+    {
+        // check if the player is moving or doing anything
+        bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f;
+        bool isActive = isMoving || !isGrounded || isSlamming;
+
+        if (isActive)
+        {
+            // reset the timer whenever the player moves or jumps
+            idleTimer = 0f;
+        }
+        else
+        {
+            // count up while the player is completely still
+            idleTimer += Time.deltaTime;
+        }
+
+        // pass the idle time to the animator so it knows when to switch
+        if (animator != null)
+        {
+            animator.SetFloat("IdleTime", idleTimer);
+        }
+    }
+
+    private void ThrowBaguette()
+    {
+        lastThrowTime = Time.time;
+        currentBaguettes--;
+
+        // update the UI to reflect the new ammo count
+        if (baguetteUI != null)
+            baguetteUI.UpdateSlots(currentBaguettes);
+
+        // spawn the baguette prefab at the throw point
+        GameObject baguette = Instantiate(
+            baguettePrefab,
+            throwPoint.position,
+            Quaternion.identity
+        );
+
+        // get the direction the player is facing
+        Vector2 throwDirection = spriteRenderer.flipX ?
+            Vector2.left : Vector2.right;
+
+        // launch the baguette — pass isJumping so it knows to add upward velocity
+        BaguetteProjectile projectile = baguette.GetComponent<BaguetteProjectile>();
+        if (projectile != null)
+        {
+            projectile.Launch(throwDirection, !isGrounded);
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // ADD BAGUETTE — called from BaguettePickup.cs
+    // ─────────────────────────────────────────────
+    public bool AddBaguette()
+    {
+        // return false if already at max so pickup stays in the world
+        if (currentBaguettes >= maxBaguettes) return false;
+
+        currentBaguettes++;
+
+        // update the UI
+        if (baguetteUI != null)
+            baguetteUI.UpdateSlots(currentBaguettes);
+
+        return true;
+    }
+
+    // ─────────────────────────────────────────────
     // UI UPDATES
     // ─────────────────────────────────────────────
     private void UpdateHealthUI()
     {
-        // fill amount goes from 0 to 1 based on current health vs max health
-        healthImage.fillAmount = (float)health / MaxHealth;
+        // tell the heart bar to update based on current health
+        if (heartHealthBar != null)
+        {
+            heartHealthBar.UpdateHearts(health);
+        }
     }
 
     private void UpdateBaguetteUI()
