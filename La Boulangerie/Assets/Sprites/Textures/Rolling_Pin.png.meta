@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 59f7678fefea76c40bcbfac8b219af87
+guid: ec62b641b793c644d9613a99dfd450ad
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6503327393785764617
-    second: Flour_Glint_2_0
+      213: 8036025969813871463
+    second: Rolling_Pin_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,12 +100,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Flour_Glint_2_0
+      name: Rolling_Pin_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 0
-        width: 31
+        width: 10
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 90bdaacfec5704a50800000000000000
-      internalID: 6503327393785764617
+      spriteID: 76bd198fa03b58f60800000000000000
+      internalID: 8036025969813871463
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Flour_Glint_2_0: 6503327393785764617
+      Rolling_Pin_0: 8036025969813871463
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

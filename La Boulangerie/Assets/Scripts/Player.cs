@@ -5,44 +5,38 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // STATS
-    // ─────────────────────────────────────────────
+    #region STATS
     [Header("Stats")]
     public int health = 3;              // how many hits the player can take
     private bool isDead = false;        // stops death from firing more than once
     private bool isInvincible = false;  // true during a slam so player cant take damage
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // MOVEMENT
-    // ─────────────────────────────────────────────
+    #region MOVEMENT
     [Header("Movement")]
     public float moveSpeed = 5f;            // normal walking speed
     public float sprintSpeed = 9f;          // speed when holding shift
     public float jumpForce = 10f;           // how high the player jumps
     public float jumpCutMultiplier = 0.5f;  // reduces jump height if space released early
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // SLAM
-    // ─────────────────────────────────────────────
+    #region SLAM
     [Header("Slam")]
     public float slamForce = 20f;       // how fast the player slams downward
     public float slamBounceForce = 8f;  // how high the player bounces after a slam
     public float slamRadius = 0.5f;     // how wide the hit detection is below the player
     public LayerMask enemyLayer;        // set this to your Enemy layer in the Inspector
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // BAGUETTE ENERGY
-    // ─────────────────────────────────────────────
+    #region BAGUETTE ENERGY
     [Header("Baguette Energy Meter")]
     public float maxBaguetteEnergy = 100f;      // maximum sprint energy
     public float baguetteDrainRate = 20f;       // how fast energy drains while sprinting
     public float baguetteRechargeRate = 10f;    // how fast energy recharges when not sprinting
     public float baguetteMinToSprint = 10f;     // minimum energy needed to start sprinting
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // BAGUETTE THROWING
-    // ─────────────────────────────────────────────
+    #region BAGUETTE THROWING
     [Header("Baguette Throwing")]
     public GameObject baguettePrefab;   // drag your baguette prefab here
     public Transform throwPoint;        // empty object at the player's hand position
@@ -52,40 +46,45 @@ public class Player : MonoBehaviour
 
     private int currentBaguettes = 0;   // how many baguettes the player currently has
     private float lastThrowTime = -1f;  // tracks when the player last threw
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // GROUND DETECTION
-    // ─────────────────────────────────────────────
+    #region STOMP BUFF
+    [Header("Stomp Buff")]
+    public int stompsRequired = 5;           // how many stomps needed to trigger buff
+    public float buffDuration = 15f;         // how long the buff lasts in seconds
+    public float buffSpeedMultiplier = 1.2f; // speed multiplier during buff
+    public float buffJumpMultiplier = 1.2f;  // jump multiplier during buff
+    public BuffDisplay buffDisplay;          // drag your BuffDisplay object here
+
+    private int currentStompChain = 0;      // tracks consecutive stomps
+    private bool isBuffActive = false;      // is the buff currently active
+    private float buffTimer = 0f;           // counts down the buff duration
+    private Color goldenColor = new Color(1f, 0.84f, 0f, 1f); // golden colour
+    private Coroutine buffFlashCoroutine;   // reference to the flash coroutine
+    #endregion
+
+    #region GROUND DETECTION
     [Header("Ground Detection")]
     public Transform groundCheck;           // empty object placed at the player's feet
     public float groundCheckRadius = 0.2f;  // how wide the ground detection circle is
     public LayerMask groundLayer;           // set this to your Ground layer in the Inspector
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // UI
-    // ─────────────────────────────────────────────
+    #region UI
     [Header("UI")]
     public HeartHealthBar heartHealthBar;   // drag HealthBar object here
-    public Image baguetteEnergyImage;
+    public Image baguetteEnergyImage;       // drag energy bar image here
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // IDLE ANIMATION
-    // ─────────────────────────────────────────────
-    private Animator animator;          // reference to the player's animator
-    private float idleTimer = 0f;       // tracks how long the player has been still
-    private float idleThreshold = 10f;  // seconds before idle bob starts
-
-    // ─────────────────────────────────────────────
-    // REFERENCES
-    // ─────────────────────────────────────────────
+    #region REFERENCES
     [Header("References")]
     public DeathMenu deathMenu;     // reference to the death menu script
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PRIVATE VARIABLES
-    // ─────────────────────────────────────────────
+    #region PRIVATE VARIABLES
     private Rigidbody2D rb;                 // the player's rigidbody
     private SpriteRenderer spriteRenderer;  // the player's sprite renderer
+    private Animator animator;              // reference to the player's animator
     private Color originalColor;            // stores the original sprite color
     private float killHeight = -10f;        // y position that kills the player
 
@@ -97,42 +96,57 @@ public class Player : MonoBehaviour
     private bool canDoubleJump;     // is double jump unlocked in this scene
     private float currentBaguetteEnergy; // current sprint energy amount
 
+    // stores the original movement values so we can always restore them correctly
+    private float originalMoveSpeed;
+    private float originalSprintSpeed;
+    private float originalJumpForce;
+
+    // idle animation timer
+    private float idleTimer = 0f;   // tracks how long the player has been still
+
     // constants — these never change at runtime
     private const int MaxHealth = 3;
     private const string DamageTag = "Damage";
     private const string EnemyTag = "Enemy";
     private const string StartScene = "Level1";
     private const string DoubleJumpScene = "Level2";
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // START — runs once when the scene loads
-    // ─────────────────────────────────────────────
+    #region START
     void Start()
     {
+        // get components attached to this GameObject
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color;
-        currentBaguetteEnergy = maxBaguetteEnergy;
-        // get the animator component on the player
         animator = GetComponent<Animator>();
 
+        // save the original sprite color so we can return to it after flashing
+        originalColor = spriteRenderer.color;
+
+        // fill baguette energy to max at the start
+        currentBaguetteEnergy = maxBaguetteEnergy;
+
+        // save original movement values before anything modifies them
+        originalMoveSpeed = moveSpeed;
+        originalSprintSpeed = sprintSpeed;
+        originalJumpForce = jumpForce;
+
+        // check which scene we are in and set up accordingly
         string currentScene = SceneManager.GetActiveScene().name;
         canDoubleJump = (currentScene == DoubleJumpScene);
 
+        // set the kill height per scene so falling off works in every level
         if (currentScene == "Level1") killHeight = -10f;
         else if (currentScene == "Level2") killHeight = -20f;
         else if (currentScene == "Level3") killHeight = -30f;
 
         // show full hearts at the start
         if (heartHealthBar != null)
-        {
             heartHealthBar.UpdateHearts(health);
-        }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // UPDATE — runs every frame
-    // ─────────────────────────────────────────────
+    #region UPDATE
     void Update()
     {
         HandleSprint();
@@ -140,19 +154,20 @@ public class Player : MonoBehaviour
         HandleJump();
         HandleSlam();
         HandleBaguetteThrow();
-        HandleIdleTimer();      // add this line
+        HandleIdleTimer();
+        HandleBuff();
         UpdateHealthUI();
         UpdateBaguetteUI();
 
+        // kill the player if they fall below the kill height for this scene
         if (transform.position.y < killHeight)
         {
             Die();
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // FIXED UPDATE — runs on physics ticks
-    // ─────────────────────────────────────────────
+    #region FIXED UPDATE
     private void FixedUpdate()
     {
         bool wasGrounded = isGrounded;
@@ -176,10 +191,9 @@ public class Player : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // SPRINT
-    // ─────────────────────────────────────────────
+    #region SPRINT
     private void HandleSprint()
     {
         bool shiftHeld = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
@@ -199,45 +213,47 @@ public class Player : MonoBehaviour
             currentBaguetteEnergy = Mathf.Min(currentBaguetteEnergy, maxBaguetteEnergy);
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // MOVEMENT
-    // ─────────────────────────────────────────────
+    #region MOVEMENT
     private void HandleMovement()
     {
-        // dont allow movement control while slamming
         if (isSlamming) return;
 
         float moveInput = Input.GetAxis("Horizontal");
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
-        // apply horizontal movement while keeping vertical velocity unchanged
         rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
 
-        // flip the sprite to face the direction the player is moving
         if (moveInput > 0)
         {
-            spriteRenderer.flipX = false; // facing right
+            spriteRenderer.flipX = false;
         }
         else if (moveInput < 0)
         {
-            spriteRenderer.flipX = true;  // facing left
+            spriteRenderer.flipX = true;
+        }
+
+        // tell the animator how fast the player is moving
+        // Mathf.Abs gives us a positive number regardless of direction
+        if (animator != null)
+        {
+            animator.SetFloat("Run", Mathf.Abs(moveInput));
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // JUMP
-    // ─────────────────────────────────────────────
+    #region JUMP
     private void HandleJump()
     {
-        // dont allow jumping while slamming
-        if (isSlamming) return;
+        // allow jumping even when on top of an enemy
+        bool canJump = isGrounded || IsStandingOnEnemy();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isGrounded)
+            if (canJump)
             {
-                PerformJump(); // normal jump from the ground
+                PerformJump(); // normal jump from the ground or enemy top
             }
             else if (hasDoubleJump)
             {
@@ -260,38 +276,57 @@ public class Player : MonoBehaviour
         }
     }
 
+    private bool IsStandingOnEnemy()
+    {
+        // check if there is an enemy directly below the player
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            groundCheck.position,
+            groundCheckRadius + 0.1f,
+            enemyLayer
+        );
+
+        // return true if any physical enemy collider is found below
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.isTrigger)
+                return true;
+        }
+
+        return false;
+    }
+
     private void PerformJump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // SLAM
-    // ─────────────────────────────────────────────
+    #region SLAM
     private void HandleSlam()
     {
-        // slam can only be performed when:
-        // the player is in the air, not already slamming, and presses S or down arrow
         bool slamKeyPressed = Input.GetKeyDown(KeyCode.S) ||
                               Input.GetKeyDown(KeyCode.DownArrow);
 
-        if (slamKeyPressed && !isGrounded && !isSlamming)
+        // check the player has meaningful vertical velocity
+        // this stops the slam triggering when standing still on top of an enemy
+        bool isFallingOrJumping = Mathf.Abs(rb.linearVelocity.y) > 0.5f;
+
+        if (slamKeyPressed && !isSlamming && !isGrounded && isFallingOrJumping)
         {
             StartCoroutine(PerformSlam());
         }
     }
 
-
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
-        isInvincible = true;
+        isInvincible = true; // player cant take damage during a slam
 
         // force the player straight down at slam speed
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slamForce);
 
-        // wait until the player hits the ground OR lands on an enemy
+        // wait until the player hits the ground or lands on an enemy
         yield return new WaitUntil(() =>
             isGrounded ||
             Physics2D.OverlapCircle(groundCheck.position, slamRadius, enemyLayer)
@@ -308,34 +343,44 @@ public class Player : MonoBehaviour
 
         foreach (Collider2D col in hitColliders)
         {
-            // skip the physical blocker — only process the trigger collider
+            // skip the physical blocker — only process trigger colliders
             if (!col.isTrigger) continue;
 
             Enemy enemy = col.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(1);
-                enemy.Stun();
+                enemy.TakeDamage(1); // deal 1 damage to the enemy
+                enemy.Stun();        // stun the enemy temporarily
                 hitEnemy = true;
             }
         }
 
-        // only bounce if we actually hit an enemy
         if (hitEnemy)
         {
+            // bounce upward immediately after hitting an enemy
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
+
+            // mark slam as done immediately so player can chain slam again
+            isSlamming = false;
+
+            // register the stomp for the buff chain
+            RegisterStomp();
+
+            // brief grace period so OnTriggerStay doesnt immediately deal damage
+            yield return new WaitForSeconds(0.2f);
+            isInvincible = false;
         }
-
-        isSlamming = false;
-
-        // brief grace period so OnTriggerStay doesnt immediately deal damage
-        yield return new WaitForSeconds(0.2f);
-        isInvincible = false;
+        else
+        {
+            // hit the ground not an enemy
+            isSlamming = false;
+            yield return new WaitForSeconds(0.2f);
+            isInvincible = false;
+        }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // BAGUETTE THROW
-    // ─────────────────────────────────────────────
+    #region BAGUETTE THROW
     private void HandleBaguetteThrow()
     {
         // check for Z key press
@@ -347,33 +392,6 @@ public class Player : MonoBehaviour
             {
                 ThrowBaguette();
             }
-        }
-    }
-
-    // ─────────────────────────────────────────────
-    // IDLE TIMER — tracks how long player has been still
-    // ─────────────────────────────────────────────
-    private void HandleIdleTimer()
-    {
-        // check if the player is moving or doing anything
-        bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f;
-        bool isActive = isMoving || !isGrounded || isSlamming;
-
-        if (isActive)
-        {
-            // reset the timer whenever the player moves or jumps
-            idleTimer = 0f;
-        }
-        else
-        {
-            // count up while the player is completely still
-            idleTimer += Time.deltaTime;
-        }
-
-        // pass the idle time to the animator so it knows when to switch
-        if (animator != null)
-        {
-            animator.SetFloat("IdleTime", idleTimer);
         }
     }
 
@@ -405,9 +423,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    // ─────────────────────────────────────────────
-    // ADD BAGUETTE — called from BaguettePickup.cs
-    // ─────────────────────────────────────────────
     public bool AddBaguette()
     {
         // return false if already at max so pickup stays in the world
@@ -421,10 +436,142 @@ public class Player : MonoBehaviour
 
         return true;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // UI UPDATES
-    // ─────────────────────────────────────────────
+    #region IDLE TIMER
+    private void HandleIdleTimer()
+    {
+        // check if the player is moving or doing anything
+        bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f;
+        bool isActive = isMoving || !isGrounded || isSlamming;
+
+        if (isActive)
+        {
+            // reset the timer whenever the player moves or jumps
+            idleTimer = 0f;
+        }
+        else
+        {
+            // count up while the player is completely still
+            idleTimer += Time.deltaTime;
+        }
+
+        // pass the idle time to the animator so it knows when to switch
+        if (animator != null)
+        {
+            animator.SetFloat("IdleTime", idleTimer);
+        }
+    }
+    #endregion
+
+    #region STOMP BUFF
+    private void HandleBuff()
+    {
+        // only run if buff is active
+        if (!isBuffActive) return;
+
+        buffTimer -= Time.deltaTime;
+
+        if (buffTimer <= 0)
+        {
+            EndBuff();
+        }
+    }
+
+    public void RegisterStomp()
+    {
+        // dont stack stomps if buff is already active
+        if (isBuffActive) return;
+
+        currentStompChain++;
+        Debug.Log("Stomp chain: " + currentStompChain + "/" + stompsRequired);
+
+        if (currentStompChain >= stompsRequired)
+        {
+            ActivateBuff();
+        }
+    }
+
+    public void ResetStompChain()
+    {
+        // reset the chain back to zero
+        currentStompChain = 0;
+        Debug.Log("Stomp chain reset!");
+    }
+
+    private void ActivateBuff()
+    {
+        isBuffActive = true;
+        buffTimer = buffDuration;
+        currentStompChain = 0;
+
+        // apply buff using original values so we never compound the multiplier
+        moveSpeed = originalMoveSpeed * buffSpeedMultiplier;
+        sprintSpeed = originalSprintSpeed * buffSpeedMultiplier;
+        jumpForce = originalJumpForce * buffJumpMultiplier;
+
+        // make player invincible during buff
+        isInvincible = true;
+
+        // turn the player golden
+        spriteRenderer.color = goldenColor;
+
+        // stop any existing flash coroutine before starting a new one
+        if (buffFlashCoroutine != null)
+            StopCoroutine(buffFlashCoroutine);
+
+        buffFlashCoroutine = StartCoroutine(BuffFlash());
+
+        // show the buff UI countdown
+        if (buffDisplay != null)
+            buffDisplay.ShowBuff(buffDuration);
+
+        Debug.Log("Buff activated!");
+    }
+
+    private void EndBuff()
+    {
+        isBuffActive = false;
+
+        // restore directly from saved originals to avoid floating point errors
+        moveSpeed = originalMoveSpeed;
+        sprintSpeed = originalSprintSpeed;
+        jumpForce = originalJumpForce;
+
+        // remove invincibility
+        isInvincible = false;
+
+        // return to original colour
+        spriteRenderer.color = originalColor;
+
+        // stop the flash coroutine
+        if (buffFlashCoroutine != null)
+            StopCoroutine(buffFlashCoroutine);
+
+        // hide the buff UI
+        if (buffDisplay != null)
+            buffDisplay.HideBuff();
+
+        Debug.Log("Buff ended!");
+    }
+
+    private IEnumerator BuffFlash()
+    {
+        // wait until the last 5 seconds of the buff before flashing
+        yield return new WaitForSeconds(buffDuration - 5f);
+
+        // flash between golden and original colour every 0.2 seconds
+        while (isBuffActive)
+        {
+            spriteRenderer.color = originalColor;   // flash to normal
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = goldenColor;     // flash back to gold
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+    #endregion
+
+    #region UI UPDATES
     private void UpdateHealthUI()
     {
         // tell the heart bar to update based on current health
@@ -436,12 +583,15 @@ public class Player : MonoBehaviour
 
     private void UpdateBaguetteUI()
     {
-        baguetteEnergyImage.fillAmount = currentBaguetteEnergy / maxBaguetteEnergy;
+        // update the energy bar fill amount
+        if (baguetteEnergyImage != null)
+        {
+            baguetteEnergyImage.fillAmount = currentBaguetteEnergy / maxBaguetteEnergy;
+        }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // DAMAGE AND DEATH
-    // ─────────────────────────────────────────────
+    #region DAMAGE AND DEATH
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // if the player touches anything tagged Damage they take a hit
@@ -453,10 +603,13 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
-        // dont take damage if already dead or currently invincible during a slam
+        // dont take damage if already dead or invincible
         if (isDead || isInvincible) return;
 
         health -= 1;
+
+        // reset the stomp chain when player takes damage
+        ResetStompChain();
 
         // knock the player upward slightly when hit
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -484,4 +637,20 @@ public class Player : MonoBehaviour
         isDead = true;
         deathMenu.ToggleDeathScreen();
     }
+    #endregion
+
+    #region GIZMOS
+    private void OnDrawGizmos()
+    {
+        if (groundCheck == null) return;
+
+        // draw the ground check circle in green
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+
+        // draw the slam radius circle in red so you can see exactly what it detects
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, slamRadius);
+    }
+    #endregion
 }

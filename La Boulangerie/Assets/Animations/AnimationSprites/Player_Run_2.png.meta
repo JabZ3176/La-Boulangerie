@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 83c8a6df8d592e34ba4abd9b227219c4
+guid: dce60b427306bca498b90d8f2be1d469
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8422324730902310600
-    second: Baguette_Empty_0
+      213: -7420542445396121942
+    second: Player_Run_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Baguette_Empty_0
+      name: Player_Run_2_0
       rect:
         serializedVersion: 2
         x: 1
-        y: 3
-        width: 28
-        height: 28
+        y: 0
+        width: 31
+        height: 45
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8319497d744ed1b80800000000000000
-      internalID: -8422324730902310600
+      spriteID: aa6a47d26ffe40990800000000000000
+      internalID: -7420542445396121942
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Baguette_Empty_0: -8422324730902310600
+      Player_Run_2_0: -7420542445396121942
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
