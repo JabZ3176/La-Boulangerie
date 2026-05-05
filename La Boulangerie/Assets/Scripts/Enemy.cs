@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     public int damageAmount = 1;        // how much damage the enemy deals to the player
     public float damageCooldown = 1f;   // seconds between each hit so it doesnt fire every frame
     private float lastDamageTime = -1f; // tracks when the enemy last dealt damage
+    public float attackDistance = 1.2f;
 
     // ─────────────────────────────────────────────
     // PRIVATE VARIABLES
@@ -39,6 +40,7 @@ public class Enemy : MonoBehaviour
     private int i;                          // current patrol point index
     private SpriteRenderer spriteRenderer;  // the enemy's sprite renderer
     private Color originalColor;            // stores the original sprite color to return to after effects
+    private Animator animator;
 
     // ─────────────────────────────────────────────
     // START — runs once when the scene loads
@@ -46,6 +48,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         // save the original color so we always return to it after flashing
         originalColor = spriteRenderer.color;
@@ -114,15 +117,21 @@ public class Enemy : MonoBehaviour
 
     private void DealDamageToPlayer(GameObject playerObject)
     {
-        // stunned enemies cannot hurt the player
         if (isStunned) return;
 
-        // only deal damage if enough time has passed since the last hit
+
+        if (Vector2.Distance(transform.position, playerObject.transform.position) > attackDistance)
+            return;
+
         if (Time.time - lastDamageTime < damageCooldown) return;
 
         lastDamageTime = Time.time;
 
-        // get the Player script and call TakeDamage on it
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+
         Player player = playerObject.GetComponent<Player>();
         if (player != null)
         {

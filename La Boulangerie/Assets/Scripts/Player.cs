@@ -28,12 +28,12 @@ public class Player : MonoBehaviour
     public LayerMask enemyLayer;        // set this to your Enemy layer in the Inspector
     #endregion
 
-    #region BAGUETTE ENERGY
-    [Header("Baguette Energy Meter")]
-    public float maxBaguetteEnergy = 100f;      // maximum sprint energy
-    public float baguetteDrainRate = 20f;       // how fast energy drains while sprinting
-    public float baguetteRechargeRate = 10f;    // how fast energy recharges when not sprinting
-    public float baguetteMinToSprint = 10f;     // minimum energy needed to start sprinting
+    #region CROISSANT ENERGY
+    [Header("Croissant Energy Meter")]
+    public float maxCroissantEnergy = 100f;     // maximum sprint energy
+    public float croissantDrainRate = 20f;      // how fast energy drains while sprinting
+    public float croissantRechargeRate = 10f;   // how fast energy recharges when not sprinting
+    public float croissantMinToSprint = 10f;    // minimum energy needed to start sprinting
     #endregion
 
     #region BAGUETTE THROWING
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
     #region UI
     [Header("UI")]
     public HeartHealthBar heartHealthBar;   // drag HealthBar object here
-    public Image baguetteEnergyImage;       // drag energy bar image here
+    public CroissantMeter croissantMeter;   // drag CroissantMeter object here
     #endregion
 
     #region REFERENCES
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
     private bool isSlamming;        // is the player currently performing a slam
     private bool hasDoubleJump;     // does the player currently have a double jump available
     private bool canDoubleJump;     // is double jump unlocked in this scene
-    private float currentBaguetteEnergy; // current sprint energy amount
+    private float currentCroissantEnergy; // current sprint energy amount
 
     // stores the original movement values so we can always restore them correctly
     private float originalMoveSpeed;
@@ -123,8 +123,8 @@ public class Player : MonoBehaviour
         // save the original sprite color so we can return to it after flashing
         originalColor = spriteRenderer.color;
 
-        // fill baguette energy to max at the start
-        currentBaguetteEnergy = maxBaguetteEnergy;
+        // fill croissant energy to max at the start
+        currentCroissantEnergy = maxCroissantEnergy;
 
         // save original movement values before anything modifies them
         originalMoveSpeed = moveSpeed;
@@ -143,6 +143,10 @@ public class Player : MonoBehaviour
         // show full hearts at the start
         if (heartHealthBar != null)
             heartHealthBar.UpdateHearts(health);
+
+        // show full croissants at the start
+        if (croissantMeter != null)
+            croissantMeter.UpdateCroissants(currentCroissantEnergy, maxCroissantEnergy);
     }
     #endregion
 
@@ -157,7 +161,7 @@ public class Player : MonoBehaviour
         HandleIdleTimer();
         HandleBuff();
         UpdateHealthUI();
-        UpdateBaguetteUI();
+        UpdateCroissantUI();
 
         // kill the player if they fall below the kill height for this scene
         if (transform.position.y < killHeight)
@@ -198,19 +202,19 @@ public class Player : MonoBehaviour
     {
         bool shiftHeld = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
-        if (shiftHeld && currentBaguetteEnergy >= baguetteMinToSprint)
+        if (shiftHeld && currentCroissantEnergy >= croissantMinToSprint)
         {
             // drain energy while sprinting
             isSprinting = true;
-            currentBaguetteEnergy -= baguetteDrainRate * Time.deltaTime;
-            currentBaguetteEnergy = Mathf.Max(currentBaguetteEnergy, 0f);
+            currentCroissantEnergy -= croissantDrainRate * Time.deltaTime;
+            currentCroissantEnergy = Mathf.Max(currentCroissantEnergy, 0f);
         }
         else
         {
             // recharge energy when not sprinting
             isSprinting = false;
-            currentBaguetteEnergy += baguetteRechargeRate * Time.deltaTime;
-            currentBaguetteEnergy = Mathf.Min(currentBaguetteEnergy, maxBaguetteEnergy);
+            currentCroissantEnergy += croissantRechargeRate * Time.deltaTime;
+            currentCroissantEnergy = Mathf.Min(currentCroissantEnergy, maxCroissantEnergy);
         }
     }
     #endregion
@@ -218,24 +222,26 @@ public class Player : MonoBehaviour
     #region MOVEMENT
     private void HandleMovement()
     {
+        // dont allow movement control while slamming
         if (isSlamming) return;
 
         float moveInput = Input.GetAxis("Horizontal");
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
+        // apply horizontal movement while keeping vertical velocity unchanged
         rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
 
+        // flip the sprite to face the direction the player is moving
         if (moveInput > 0)
         {
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = false; // facing right
         }
         else if (moveInput < 0)
         {
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = true;  // facing left
         }
 
         // tell the animator how fast the player is moving
-        // Mathf.Abs gives us a positive number regardless of direction
         if (animator != null)
         {
             animator.SetFloat("Run", Mathf.Abs(moveInput));
@@ -309,19 +315,19 @@ public class Player : MonoBehaviour
                               Input.GetKeyDown(KeyCode.DownArrow);
 
         // check the player has meaningful vertical velocity
-        // this stops the slam triggering when standing still on top of an enemy
+        // stops the slam triggering when standing still on top of an enemy
         bool isFallingOrJumping = Mathf.Abs(rb.linearVelocity.y) > 0.5f;
 
         if (slamKeyPressed && !isSlamming && !isGrounded && isFallingOrJumping)
         {
             StartCoroutine(PerformSlam());
+            StartCoroutine(SlamInvincibility()); // run separately so they dont interfere
         }
     }
 
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
-        isInvincible = true; // player cant take damage during a slam
 
         // force the player straight down at slam speed
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slamForce);
@@ -360,22 +366,33 @@ public class Player : MonoBehaviour
             // bounce upward immediately after hitting an enemy
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
 
-            // mark slam as done immediately so player can chain slam again
+            // mark slam as done so player can chain slam again
             isSlamming = false;
 
             // register the stomp for the buff chain
             RegisterStomp();
-
-            // brief grace period so OnTriggerStay doesnt immediately deal damage
-            yield return new WaitForSeconds(0.2f);
-            isInvincible = false;
         }
         else
         {
             // hit the ground not an enemy
             isSlamming = false;
+        }
+    }
+
+    private IEnumerator SlamInvincibility()
+    {
+        // only apply slam invincibility if buff is not active
+        // buff handles its own invincibility
+        if (!isBuffActive)
+        {
+            isInvincible = true;
             yield return new WaitForSeconds(0.2f);
-            isInvincible = false;
+
+            // only turn off if buff didnt activate during this time
+            if (!isBuffActive)
+            {
+                isInvincible = false;
+            }
         }
     }
     #endregion
@@ -415,7 +432,7 @@ public class Player : MonoBehaviour
         Vector2 throwDirection = spriteRenderer.flipX ?
             Vector2.left : Vector2.right;
 
-        // launch the baguette — pass isJumping so it knows to add upward velocity
+        // launch the baguette — pass isGrounded so it knows to add upward velocity
         BaguetteProjectile projectile = baguette.GetComponent<BaguetteProjectile>();
         if (projectile != null)
         {
@@ -581,12 +598,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void UpdateBaguetteUI()
+    private void UpdateCroissantUI()
     {
-        // update the energy bar fill amount
-        if (baguetteEnergyImage != null)
+        // update the croissant meter based on current energy
+        if (croissantMeter != null)
         {
-            baguetteEnergyImage.fillAmount = currentBaguetteEnergy / maxBaguetteEnergy;
+            croissantMeter.UpdateCroissants(currentCroissantEnergy, maxCroissantEnergy);
         }
     }
     #endregion

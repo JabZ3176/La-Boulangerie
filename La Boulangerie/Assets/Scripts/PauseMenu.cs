@@ -3,6 +3,8 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject container;
+    public GameObject settingsContainer;
+
 
     private bool isPaused = false;
 
@@ -58,5 +60,17 @@ public class PauseMenu : MonoBehaviour
     {
                UnityEngine.SceneManagement.SceneManager.LoadScene("LevelScene");
        Time.timeScale = 0;
+    }
+  
+    public void OpenSettings()
+    {
+        container.SetActive(false);
+        settingsContainer.SetActive(true);
+    }
+
+    public void BackToPauseMenu()
+    {
+        settingsContainer.SetActive(false);
+        container.SetActive(true);
     }
 }
