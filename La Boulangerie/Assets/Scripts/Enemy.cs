@@ -30,31 +30,42 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     [Header("Damage")]
     public int damageAmount = 1;        // how much damage the enemy deals to the player
-    public float damageCooldown = 1f;   // seconds between each hit so it doesnt fire every frame
+    public float damageCooldown = 1f;   // seconds between each hit
     private float lastDamageTime = -1f; // tracks when the enemy last dealt damage
-    public float attackDistance = 1.2f;
+
+    // ─────────────────────────────────────────────
+    // ATTACK
+    // ─────────────────────────────────────────────
+    [Header("Attack")]
+    public float attackRange = 1.5f;    // how close the player needs to be to trigger attack
+    public Transform playerTransform;   // reference to the player position
+
+    [Header("References")]
+    public Animator enemyAnimator;  // drag Actual Enemy here in the Inspector
 
     // ─────────────────────────────────────────────
     // PRIVATE VARIABLES
     // ─────────────────────────────────────────────
     private int i;                          // current patrol point index
     private SpriteRenderer spriteRenderer;  // the enemy's sprite renderer
-    private Color originalColor;            // stores the original sprite color to return to after effects
-    private Animator animator;
+    private Animator animator;              // the enemy's animator
+    private Color originalColor;            // stores the original sprite color
+    private bool isAttacking = false;       // tracks if enemy is currently attacking
 
     // ─────────────────────────────────────────────
-    // START — runs once when the scene loads
+    // START
     // ─────────────────────────────────────────────
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
 
-        // save the original color so we always return to it after flashing
         originalColor = spriteRenderer.color;
-
-        // set health to full at the start
         currentHealth = maxHealth;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            playerTransform = player.transform;
     }
 
     // ─────────────────────────────────────────────
@@ -62,10 +73,49 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     void Update()
     {
-        // stop all behaviour if dead or stunned
         if (isDead || isStunned) return;
 
-        Patrol();
+        CheckAttackRange();
+
+        // only patrol when not attacking
+        if (!isAttacking)
+        {
+            Patrol();
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // CHECK ATTACK RANGE
+    // ─────────────────────────────────────────────
+    private void CheckAttackRange()
+    {
+        if (playerTransform == null)
+        {
+            Debug.LogError("Player Transform is NULL!");
+            return;
+        }
+
+        float distanceToPlayer = Vector2.Distance(
+            transform.position,
+            playerTransform.position
+        );
+
+        if (distanceToPlayer <= attackRange)
+        {
+            if (!isAttacking)
+            {
+                isAttacking = true;
+                animator.SetBool("IsAttacking", true);
+            }
+        }
+        else
+        {
+            if (isAttacking)
+            {
+                isAttacking = false;
+                animator.SetBool("IsAttacking", false);
+            }
+        }
     }
 
     // ─────────────────────────────────────────────
@@ -73,23 +123,20 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     private void Patrol()
     {
-        if (points.Length == 0) return; // safety check — needs at least one point
+        if (points.Length == 0) return;
 
-        // if close enough to the current point move to the next one
         if (Vector2.Distance(transform.position, points[i].position) < 0.25f)
         {
             i++;
-            if (i == points.Length) i = 0; // loop back to the first point
+            if (i == points.Length) i = 0;
         }
 
-        // move towards the current patrol point
         transform.position = Vector2.MoveTowards(
             transform.position,
             points[i].position,
             speed * Time.deltaTime
         );
 
-        // flip the sprite to face the direction of movement
         spriteRenderer.flipX = (transform.position.x - points[i].position.x) > 0f;
     }
 
@@ -98,7 +145,6 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // when the player first touches the enemy deal damage
         if (other.CompareTag("Player"))
         {
             DealDamageToPlayer(other.gameObject);
@@ -107,8 +153,6 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        // while the player stays in contact keep trying to deal damage
-        // the cooldown inside DealDamageToPlayer stops it hitting every frame
         if (other.CompareTag("Player"))
         {
             DealDamageToPlayer(other.gameObject);
@@ -119,18 +163,9 @@ public class Enemy : MonoBehaviour
     {
         if (isStunned) return;
 
-
-        if (Vector2.Distance(transform.position, playerObject.transform.position) > attackDistance)
-            return;
-
         if (Time.time - lastDamageTime < damageCooldown) return;
 
         lastDamageTime = Time.time;
-
-        if (animator != null)
-        {
-            animator.SetTrigger("Attack");
-        }
 
         Player player = playerObject.GetComponent<Player>();
         if (player != null)
@@ -144,19 +179,25 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     public void Stun()
     {
-        if (isDead) return; // cant stun a dead enemy
+        if (isDead) return;
         StartCoroutine(StunCoroutine());
     }
 
     private IEnumerator StunCoroutine()
     {
         isStunned = true;
-        spriteRenderer.color = Color.yellow; // flash yellow to show the enemy is stunned
+        isAttacking = false;
 
-        yield return new WaitForSeconds(stunDuration); // wait for the stun to wear off
+        // stop the attack animation while stunned
+        if (animator != null)
+            animator.SetBool("IsAttacking", false);
+
+        spriteRenderer.color = Color.yellow;
+
+        yield return new WaitForSeconds(stunDuration);
 
         isStunned = false;
-        spriteRenderer.color = originalColor; // return to the original sprite color
+        spriteRenderer.color = originalColor;
     }
 
     // ─────────────────────────────────────────────
@@ -164,11 +205,10 @@ public class Enemy : MonoBehaviour
     // ─────────────────────────────────────────────
     public void TakeDamage(int damage)
     {
-        if (isDead) return; // cant damage a dead enemy
+        if (isDead) return;
 
         currentHealth -= damage;
-
-        StartCoroutine(HitFlash()); // briefly flash red to show damage was dealt
+        StartCoroutine(HitFlash());
 
         if (currentHealth <= 0)
         {
@@ -178,10 +218,8 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator HitFlash()
     {
-        spriteRenderer.color = Color.red;   // flash red when hit
+        spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.1f);
-
-        // if still stunned return to yellow, otherwise return to the original color
         spriteRenderer.color = isStunned ? Color.yellow : originalColor;
     }
 
@@ -191,9 +229,7 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        StopAllCoroutines(); // stop any running flashes or stuns
-
-        // small delay before destroying so the hit flash has time to show
+        StopAllCoroutines();
         Destroy(gameObject, 0.2f);
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject container;
+    public GameObject pauseMenuContainer;
     public GameObject settingsContainer;
 
 
@@ -26,7 +26,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Pause()
     {
-        container.SetActive(true);
+        pauseMenuContainer.SetActive(true);
         Time.timeScale = 0;
         isPaused = true;
 
@@ -36,7 +36,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Resume()
     {
-        container.SetActive(false);
+        pauseMenuContainer.SetActive(false);
         Time.timeScale = 1;
         isPaused = false;
 
@@ -64,13 +64,13 @@ public class PauseMenu : MonoBehaviour
   
     public void OpenSettings()
     {
-        container.SetActive(false);
+        pauseMenuContainer.SetActive(false);
         settingsContainer.SetActive(true);
     }
 
     public void BackToPauseMenu()
     {
         settingsContainer.SetActive(false);
-        container.SetActive(true);
+        pauseMenuContainer.SetActive(true);
     }
 }

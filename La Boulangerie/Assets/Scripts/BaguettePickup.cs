@@ -6,15 +6,19 @@ public class BaguettePickup : MonoBehaviour
     // SETTINGS
     // ─────────────────────────────────────────────
     [Header("Respawn Settings")]
-    public float respawnTime = 30f;     // how long before the baguette reappears
+    public float respawnTime = 30f;
+
+    [Header("Sound")]
+    public AudioClip pickupSound;   // drag your pickup sound here
+    public float volume = 1f;
 
     // ─────────────────────────────────────────────
     // PRIVATE VARIABLES
     // ─────────────────────────────────────────────
-    private SpriteRenderer spriteRenderer;  // reference to the sprite renderer
-    private Collider2D col;                 // reference to the collider
-    private bool isCollected = false;       // tracks if the baguette has been picked up
-    private float respawnTimer = 0f;        // counts up to respawnTime
+    private SpriteRenderer spriteRenderer;
+    private Collider2D col;
+    private bool isCollected = false;
+    private float respawnTimer = 0f;
 
     // ─────────────────────────────────────────────
     // START
@@ -26,16 +30,14 @@ public class BaguettePickup : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────
-    // UPDATE — counts up the respawn timer
+    // UPDATE
     // ─────────────────────────────────────────────
     void Update()
     {
-        // only count if the baguette has been collected
         if (!isCollected) return;
 
         respawnTimer += Time.deltaTime;
 
-        // once the timer reaches respawnTime bring it back
         if (respawnTimer >= respawnTime)
         {
             Respawn();
@@ -43,7 +45,7 @@ public class BaguettePickup : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────
-    // TRIGGER — fires when player touches the pickup
+    // TRIGGER
     // ─────────────────────────────────────────────
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -52,9 +54,10 @@ public class BaguettePickup : MonoBehaviour
             Player player = other.GetComponent<Player>();
             if (player != null)
             {
-                // only pick up if the player has room for more baguettes
                 if (player.AddBaguette())
                 {
+                    // play sound on pickup
+                    PlayPickupSound();
                     Collect();
                 }
             }
@@ -62,30 +65,35 @@ public class BaguettePickup : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────
-    // COLLECT — hides the baguette and starts timer
+    // PLAY SOUND
+    // ─────────────────────────────────────────────
+    private void PlayPickupSound()
+    {
+        if (pickupSound != null)
+        {
+            AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
+        }
+    }
+
+    // ─────────────────────────────────────────────
+    // COLLECT
     // ─────────────────────────────────────────────
     private void Collect()
     {
         isCollected = true;
         respawnTimer = 0f;
-
-        // hide the baguette visually but keep the object alive
         spriteRenderer.enabled = false;
-        col.enabled = false;        // disable collider so player cant pick it up while hidden
+        col.enabled = false;
     }
 
     // ─────────────────────────────────────────────
-    // RESPAWN — makes the baguette reappear
+    // RESPAWN
     // ─────────────────────────────────────────────
     private void Respawn()
     {
         isCollected = false;
         respawnTimer = 0f;
-
-        // show the baguette again
         spriteRenderer.enabled = true;
-        col.enabled = true;         // re-enable collider so player can pick it up again
-
-        Debug.Log("Baguette respawned!");
+        col.enabled = true;
     }
 }

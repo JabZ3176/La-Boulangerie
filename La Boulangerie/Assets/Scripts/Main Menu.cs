@@ -5,21 +5,18 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [Header("Buttons")]
-    public Button continueButton; // drag your Continue button here in the Inspector
+    public Button continueButton;   // drag Continue button here
 
     void Start()
     {
-        // if there is no saved level grey out the continue button
+        // grey out continue if no save exists
         if (PlayerPrefs.GetString("CurrentLevel", "") == "")
         {
             continueButton.interactable = false;
-
-            // fade the text so it looks locked
-            TMPro.TextMeshProUGUI label = continueButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            TMPro.TextMeshProUGUI label = continueButton
+                .GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (label != null)
-            {
                 label.color = new Color(1f, 1f, 1f, 0.3f);
-            }
         }
         else
         {
@@ -29,27 +26,47 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
-        // wipe all saved progress so everything starts fresh
+        // wipe all saved progress
         PlayerPrefs.DeleteKey("CurrentLevel");
         PlayerPrefs.DeleteKey("LevelReached");
-
-        // set ShowTutorial to 1 so Tutorial.cs knows to show it
-        PlayerPrefs.SetInt("ShowTutorial", 1);
         PlayerPrefs.Save();
 
-        Time.timeScale = 1;
-        SceneManager.LoadScene("Level1");
+        Time.timeScale = 1f;
+
+        // check if this is the first time playing
+        bool firstTime = PlayerPrefs.GetInt("HasPlayedBefore", 0) == 0;
+
+        if (firstTime)
+        {
+            // mark as played so next new game skips tutorial
+            PlayerPrefs.SetInt("HasPlayedBefore", 1);
+            PlayerPrefs.Save();
+
+            // go to tutorial first
+            SceneManager.LoadScene("Tutorial");
+        }
+        else
+        {
+            // skip tutorial and go straight to Level1
+            SceneManager.LoadScene("Level1");
+        }
     }
 
     public void ContinueGame()
     {
-        // make sure tutorial never shows when continuing
         PlayerPrefs.SetInt("ShowTutorial", 0);
         PlayerPrefs.Save();
 
         string savedLevel = PlayerPrefs.GetString("CurrentLevel", "Level1");
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(savedLevel);
+    }
+
+    public void OpenTutorial()
+    {
+        // accessible from main menu for returning players
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Tutorial");
     }
 
     public void QuitGame()

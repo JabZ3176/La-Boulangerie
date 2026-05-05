@@ -64,23 +64,19 @@ public class CroissantMeter : MonoBehaviour
     // ─────────────────────────────────────────────
     public void UpdateCroissants(float currentEnergy, float maxEnergy)
     {
-        // convert to a 0-1 percentage
+        // safety check — dont run if images arent set up yet
+        if (image1 == null || image2 == null || image3 == null) return;
+
         float energyPercent = Mathf.Clamp01(currentEnergy / maxEnergy);
 
-        // split the percentage across 3 slots
-        // each slot represents 1/3 of the total energy
-        // slot3 drains first (top third), then slot2, then slot1
+        float slot3Fill = Mathf.Clamp01(energyPercent * 3f);
+        float slot2Fill = Mathf.Clamp01((energyPercent * 3f) - 1f);
+        float slot1Fill = Mathf.Clamp01((energyPercent * 3f) - 2f);
 
-        float slot3Fill = Mathf.Clamp01(energyPercent * 3f);           // drains first: 100%-66%
-        float slot2Fill = Mathf.Clamp01((energyPercent * 3f) - 1f);    // drains second: 66%-33%
-        float slot1Fill = Mathf.Clamp01((energyPercent * 3f) - 2f);    // drains last: 33%-0%
-
-        // apply fill amounts — this makes them slide like a bar
         image3.fillAmount = slot3Fill;
         image2.fillAmount = slot2Fill;
         image1.fillAmount = slot1Fill;
 
-        // swap sprite to empty when fully drained
         image3.sprite = slot3Fill > 0 ? croissantFull : croissantEmpty;
         image2.sprite = slot2Fill > 0 ? croissantFull : croissantEmpty;
         image1.sprite = slot1Fill > 0 ? croissantFull : croissantEmpty;
