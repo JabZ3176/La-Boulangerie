@@ -77,21 +77,21 @@ public class GameManager : MonoBehaviour
 
         if (scene == "Level1")
         {
-            totalFlour = 3; minFlour = 1;
-            totalMilk = 3; minMilk = 1;
-            totalButter = 3; minButter = 1;
+            totalFlour = 2; minFlour = 1;
+            totalMilk = 2; minMilk = 1;
+            totalButter = 2; minButter = 1;
         }
         else if (scene == "Level2")
         {
-            totalFlour = 5; minFlour = 3;
-            totalMilk = 5; minMilk = 3;
-            totalButter = 5; minButter = 2;
+            totalFlour = 3; minFlour = 1;
+            totalMilk = 3; minMilk = 1;
+            totalButter = 3; minButter = 2;
         }
         else if (scene == "Level3")
         {
-            totalFlour = 7; minFlour = 4;
-            totalMilk = 7; minMilk = 4;
-            totalButter = 7; minButter = 3;
+            totalFlour = 5; minFlour = 2;
+            totalMilk = 5; minMilk = 2;
+            totalButter = 5; minButter = 1;
         }
     }
 

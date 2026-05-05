@@ -6,38 +6,27 @@ public class MovingPlatform : MonoBehaviour
     public Transform[] points;
 
     private int i;
+    private Rigidbody2D rb;
+
     void Start()
     {
-        transform.position = points[0].position;
+        rb = GetComponent<Rigidbody2D>();
+        rb.position = points[0].position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (Vector2.Distance(transform.position, points[i].position) < 0.1f)
+        if (Vector2.Distance(rb.position, points[i].position) < 0.1f)
         {
-            i++;
-            if (i == points.Length)
-            {
-                i = 0;
-            }
+            i = (i + 1) % points.Length;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
-    }
+        Vector2 newPos = Vector2.MoveTowards(
+            rb.position,
+            points[i].position,
+            speed * Time.fixedDeltaTime
+        );
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-       if (collision.gameObject.tag == "Player")
-        {
-            collision.transform.SetParent(transform);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            collision.transform.SetParent(null);
-        }
+        rb.MovePosition(newPos);
     }
 }

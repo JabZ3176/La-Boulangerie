@@ -47,5 +47,11 @@ TagManager:
   - name: Background
     uniqueID: 1499901327
     locked: 0
+  - name: Fire
+    uniqueID: 1507233113
+    locked: 0
+  - name: Environement
+    uniqueID: 1422666775
+    locked: 0
   m_RenderingLayers:
   - Default

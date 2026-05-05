@@ -136,7 +136,7 @@ public class Player : MonoBehaviour
         canDoubleJump = (currentScene == DoubleJumpScene);
 
         // set the kill height per scene so falling off works in every level
-        if (currentScene == "Level1") killHeight = -10f;
+        if (currentScene == "Level1") killHeight = -20f;
         else if (currentScene == "Level2") killHeight = -20f;
         else if (currentScene == "Level3") killHeight = -30f;
 
