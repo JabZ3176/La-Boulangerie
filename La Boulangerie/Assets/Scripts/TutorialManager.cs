@@ -26,13 +26,12 @@ public class TutorialManager : MonoBehaviour
     private string[] panelMessages = new string[]
     {
         "CONTROLS\n\n" +
-        "Move Left:       A or ← Arrow\n" +
-        "Move Right:      D or → Arrow\n" +
-        "Jump:            Space\n" +
-        "Sprint:          Hold Shift\n" +
-        "Slam:            S or ↓ Arrow (in air)\n" +
-        "Throw Baguette:  Z",
-
+        "Move Left:       'A' or ← Arrow\n" +
+        "Move Right:      'D' or → Arrow\n" +
+        "Jump:            'Space'\n" +
+        "Sprint:          Hold 'Shift'\n" +
+        "Slam:            'S' or ↓ Arrow (in air)\n" +
+        "Throw Baguette:  'Z'",
         "INGREDIENTS\n\n" +
         "Collect ingredients scattered around the level!\n" +
         "Each level requires a minimum amount of each\n" +
@@ -62,7 +61,6 @@ public class TutorialManager : MonoBehaviour
 
     #region PRIVATE VARIABLES
     private int currentPanel = -1;
-    private bool panelIsShowing = false;
     private Transform playerTransform;
     #endregion
 
@@ -87,7 +85,6 @@ public class TutorialManager : MonoBehaviour
         if (index <= currentPanel) return;
 
         currentPanel = index;
-        panelIsShowing = true;
 
         Time.timeScale = 0f;
 
@@ -111,7 +108,6 @@ public class TutorialManager : MonoBehaviour
 
     public void OnContinuePressed()
     {
-        panelIsShowing = false;
         tutorialPanel.SetActive(false);
 
         Time.timeScale = 1f;

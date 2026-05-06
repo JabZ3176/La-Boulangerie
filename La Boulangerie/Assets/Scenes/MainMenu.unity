@@ -601,7 +601,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1533073190570966112, guid: 969a4fe14b2f384459c35a5926825dcf, type: 3}
+    - {fileID: 2003790807618187855, guid: 969a4fe14b2f384459c35a5926825dcf, type: 3}
+    - {fileID: 2888145156369213432, guid: 969a4fe14b2f384459c35a5926825dcf, type: 3}
+    - {fileID: 2527850331889620745, guid: 969a4fe14b2f384459c35a5926825dcf, type: 3}
+    - {fileID: 2754313650162907774, guid: 969a4fe14b2f384459c35a5926825dcf, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

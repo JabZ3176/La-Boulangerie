@@ -25,6 +25,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip level2Music;
     public AudioClip level3Music;
     public AudioClip tutorialMusic;
+    public AudioClip levelSceneMusic;
 
     [Header("Music Settings")]
     public float musicVolume = 0.01f;
@@ -90,6 +91,8 @@ public class SoundManager : MonoBehaviour
             newMusic = level2Music;
         else if (scene.name == "Level3")
             newMusic = level3Music;
+        else if (scene.name == "LevelScene")
+            newMusic = levelSceneMusic;
 
         if (newMusic != null && newMusic != musicSource.clip)
         {

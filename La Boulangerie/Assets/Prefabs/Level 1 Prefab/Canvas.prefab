@@ -1849,7 +1849,6 @@ GameObject:
   - component: {fileID: 3713350763219960485}
   - component: {fileID: 177601442492044962}
   - component: {fileID: 6587400284471752586}
-  - component: {fileID: 630888607479265956}
   m_Layer: 5
   m_Name: Resume Btn
   m_TagString: Untagged
@@ -1958,20 +1957,6 @@ MonoBehaviour:
   leftArrow: {fileID: 6827566519200841735}
   rightArrow: {fileID: 6669333998976484238}
   buttonText: {fileID: 856878716988374876}
---- !u!114 &630888607479265956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1235658617890707837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &1275271617912281500
 GameObject:
   m_ObjectHideFlags: 0
@@ -4525,7 +4510,6 @@ GameObject:
   - component: {fileID: 4820026467629457936}
   - component: {fileID: 3523595540900794298}
   - component: {fileID: 2335462954898904400}
-  - component: {fileID: 444364497952983880}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -4617,20 +4601,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &444364497952983880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4412912015102035274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &4417044220554885509
 GameObject:
   m_ObjectHideFlags: 0
@@ -4780,7 +4750,6 @@ GameObject:
   - component: {fileID: 2123053067696677991}
   - component: {fileID: 8981527177570851600}
   - component: {fileID: 1635809254997225332}
-  - component: {fileID: 7368667834873916313}
   m_Layer: 5
   m_Name: Back to levels
   m_TagString: Untagged
@@ -4889,20 +4858,6 @@ MonoBehaviour:
   leftArrow: {fileID: 3163478538321825985}
   rightArrow: {fileID: 1044743847549743277}
   buttonText: {fileID: 7035778306419968598}
---- !u!114 &7368667834873916313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4574604967602158470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &4618595704661281948
 GameObject:
   m_ObjectHideFlags: 0
@@ -5129,7 +5084,6 @@ GameObject:
   - component: {fileID: 7230835271606230119}
   - component: {fileID: 5608030507690630627}
   - component: {fileID: 1167285343107938000}
-  - component: {fileID: 1379253003477031886}
   m_Layer: 5
   m_Name: Respawn Button
   m_TagString: Untagged
@@ -5238,20 +5192,6 @@ MonoBehaviour:
   leftArrow: {fileID: 1515244390270080168}
   rightArrow: {fileID: 2053792409662193539}
   buttonText: {fileID: 3587429829126840082}
---- !u!114 &1379253003477031886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4714469964827729612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &4720514451894304631
 GameObject:
   m_ObjectHideFlags: 0
@@ -6233,7 +6173,6 @@ GameObject:
   - component: {fileID: 5157252678343198525}
   - component: {fileID: 4567314118158859379}
   - component: {fileID: 3519423045700666453}
-  - component: {fileID: 2945295547969827966}
   m_Layer: 5
   m_Name: Main Menu Btn
   m_TagString: Untagged
@@ -6342,20 +6281,6 @@ MonoBehaviour:
   leftArrow: {fileID: 9111680171680282643}
   rightArrow: {fileID: 8931860469757576461}
   buttonText: {fileID: 5746587233484245830}
---- !u!114 &2945295547969827966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5617098450737974997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &6006972692828033456
 GameObject:
   m_ObjectHideFlags: 0
@@ -8238,7 +8163,6 @@ GameObject:
   - component: {fileID: 4373179592934874117}
   - component: {fileID: 3966278041511840834}
   - component: {fileID: 7569060044175406033}
-  - component: {fileID: 2247266517468440454}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -8347,20 +8271,6 @@ MonoBehaviour:
   leftArrow: {fileID: 313085424315665101}
   rightArrow: {fileID: 4051258414539407228}
   buttonText: {fileID: 5937053270468295140}
---- !u!114 &2247266517468440454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8899471997163182569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
 --- !u!1 &8904854558957028521
 GameObject:
   m_ObjectHideFlags: 0
@@ -9157,7 +9067,6 @@ GameObject:
   - component: {fileID: 8148382983667955060}
   - component: {fileID: 3381602483579741297}
   - component: {fileID: 208146431992368942}
-  - component: {fileID: 8965000740993932732}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -9266,17 +9175,3 @@ MonoBehaviour:
   leftArrow: {fileID: 8406839505735899360}
   rightArrow: {fileID: 9214831396744547553}
   buttonText: {fileID: 5249800132616820052}
---- !u!114 &8965000740993932732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9223371275056998255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
-  clickSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
-  volume: 1
