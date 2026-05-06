@@ -413,14 +413,25 @@ public class Player : MonoBehaviour
         if (baguetteUI != null)
             baguetteUI.UpdateSlots(currentBaguettes);
 
-        GameObject baguette = Instantiate(
-            baguettePrefab,
-            throwPoint.position,
-            Quaternion.identity
-        );
-
         Vector2 throwDirection = spriteRenderer.flipX ?
             Vector2.left : Vector2.right;
+
+        Vector3 spawnPosition = throwPoint.position;
+
+        if (throwDirection == Vector2.left)
+        {
+            spawnPosition.x = transform.position.x - Mathf.Abs(throwPoint.localPosition.x);
+        }
+        else
+        {
+            spawnPosition.x = transform.position.x + Mathf.Abs(throwPoint.localPosition.x);
+        }
+
+        GameObject baguette = Instantiate(
+            baguettePrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
 
         BaguetteProjectile projectile = baguette.GetComponent<BaguetteProjectile>();
         if (projectile != null)

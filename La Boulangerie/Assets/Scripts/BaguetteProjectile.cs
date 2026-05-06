@@ -11,15 +11,19 @@ public class BaguetteProjectile : MonoBehaviour
 
     #region PRIVATE VARIABLES
     private Rigidbody2D rb;
-    private Vector2 direction;
     private bool hasHit = false;
+    #endregion
+
+    #region AWAKE
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
     #endregion
 
     #region LAUNCH
     public void Launch(Vector2 throwDirection, bool isJumping)
     {
-        rb = GetComponent<Rigidbody2D>();
-
         if (isJumping)
         {
             rb.gravityScale = 1f;

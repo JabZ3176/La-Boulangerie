@@ -17,8 +17,8 @@ TagManager:
   - Ground
   - Enemy
   - Background
-  - 
-  - 
+  - Player
+  - Projectile
   - 
   - 
   - 
