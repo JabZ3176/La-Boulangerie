@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
+    #region REFERENCES
     public GameObject pauseMenuContainer;
     public GameObject settingsContainer;
+    #endregion
 
-
+    #region PRIVATE VARIABLES
     private bool isPaused = false;
+    #endregion
 
+    #region UPDATE
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -21,9 +25,10 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             }
         }
-
     }
+    #endregion
 
+    #region PAUSE CONTROL
     private void Pause()
     {
         pauseMenuContainer.SetActive(true);
@@ -43,8 +48,9 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+    #endregion
 
-
+    #region BUTTONS
     public void ResumeButton()
     {
         Resume();
@@ -58,10 +64,10 @@ public class PauseMenu : MonoBehaviour
 
     public void Levels()
     {
-               UnityEngine.SceneManagement.SceneManager.LoadScene("LevelScene");
-       Time.timeScale = 0;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LevelScene");
+        Time.timeScale = 0;
     }
-  
+
     public void OpenSettings()
     {
         pauseMenuContainer.SetActive(false);
@@ -73,4 +79,5 @@ public class PauseMenu : MonoBehaviour
         settingsContainer.SetActive(false);
         pauseMenuContainer.SetActive(true);
     }
+    #endregion
 }

@@ -3,58 +3,52 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // PATROL
-    // ─────────────────────────────────────────────
+    #region PATROL
     [Header("Patrol")]
-    public float speed = 2f;        // how fast the enemy moves between patrol points
-    public Transform[] points;      // the two or more patrol points set in the Inspector
+    public float speed = 2f;
+    public Transform[] points;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // STATS
-    // ─────────────────────────────────────────────
+    #region STATS
     [Header("Stats")]
-    public int maxHealth = 3;       // how many hits the enemy can take before dying
-    private int currentHealth;      // tracks current health during gameplay
-    private bool isDead = false;    // stops death from firing more than once
+    public int maxHealth = 3;
+    private int currentHealth;
+    private bool isDead = false;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // STUN
-    // ─────────────────────────────────────────────
+    #region STUN
     [Header("Stun")]
-    public float stunDuration = 2f; // how long the enemy is stunned after being slammed
-    private bool isStunned = false; // tracks whether the enemy is currently stunned
+    public float stunDuration = 2f;
+    private bool isStunned = false;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // DAMAGE
-    // ─────────────────────────────────────────────
+    #region DAMAGE
     [Header("Damage")]
-    public int damageAmount = 1;        // how much damage the enemy deals to the player
-    public float damageCooldown = 1f;   // seconds between each hit
-    private float lastDamageTime = -1f; // tracks when the enemy last dealt damage
+    public int damageAmount = 1;
+    public float damageCooldown = 1f;
+    private float lastDamageTime = -1f;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // ATTACK
-    // ─────────────────────────────────────────────
+    #region ATTACK
     [Header("Attack")]
-    public float attackRange = 1.5f;    // how close the player needs to be to trigger attack
-    public Transform playerTransform;   // reference to the player position
+    public float attackRange = 1.5f;
+    public Transform playerTransform;
+    #endregion
 
+    #region REFERENCES
     [Header("References")]
-    public Animator enemyAnimator;  // drag Actual Enemy here in the Inspector
+    public Animator enemyAnimator;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PRIVATE VARIABLES
-    // ─────────────────────────────────────────────
-    private int i;                          // current patrol point index
-    private SpriteRenderer spriteRenderer;  // the enemy's sprite renderer
-    private Animator animator;              // the enemy's animator
-    private Color originalColor;            // stores the original sprite color
-    private bool isAttacking = false;       // tracks if enemy is currently attacking
+    #region PRIVATE VARIABLES
+    private int i;
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+    private Color originalColor;
+    private bool isAttacking = false;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // START
-    // ─────────────────────────────────────────────
+    #region START
     void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -67,26 +61,23 @@ public class Enemy : MonoBehaviour
         if (player != null)
             playerTransform = player.transform;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // UPDATE — runs every frame
-    // ─────────────────────────────────────────────
+    #region UPDATE
     void Update()
     {
         if (isDead || isStunned) return;
 
         CheckAttackRange();
 
-        // only patrol when not attacking
         if (!isAttacking)
         {
             Patrol();
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // CHECK ATTACK RANGE
-    // ─────────────────────────────────────────────
+    #region ATTACK RANGE
     private void CheckAttackRange()
     {
         if (playerTransform == null)
@@ -117,10 +108,9 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PATROL
-    // ─────────────────────────────────────────────
+    #region PATROL MOVEMENT
     private void Patrol()
     {
         if (points.Length == 0) return;
@@ -139,10 +129,9 @@ public class Enemy : MonoBehaviour
 
         spriteRenderer.flipX = (transform.position.x - points[i].position.x) > 0f;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PLAYER CONTACT — deals damage when touching player
-    // ─────────────────────────────────────────────
+    #region PLAYER CONTACT
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -173,10 +162,9 @@ public class Enemy : MonoBehaviour
             player.TakeDamage();
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // STUN — called from Player.cs after a successful slam
-    // ─────────────────────────────────────────────
+    #region STUN CONTROL
     public void Stun()
     {
         if (isDead) return;
@@ -188,7 +176,6 @@ public class Enemy : MonoBehaviour
         isStunned = true;
         isAttacking = false;
 
-        // stop the attack animation while stunned
         if (animator != null)
             animator.SetBool("IsAttacking", false);
 
@@ -199,10 +186,9 @@ public class Enemy : MonoBehaviour
         isStunned = false;
         spriteRenderer.color = originalColor;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // TAKE DAMAGE — called from Player.cs after a slam
-    // ─────────────────────────────────────────────
+    #region DAMAGE CONTROL
     public void TakeDamage(int damage)
     {
         if (isDead) return;
@@ -222,14 +208,14 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = isStunned ? Color.yellow : originalColor;
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // DEATH
-    // ─────────────────────────────────────────────
+    #region DEATH
     private void Die()
     {
         isDead = true;
         StopAllCoroutines();
         Destroy(gameObject, 0.2f);
     }
+    #endregion
 }

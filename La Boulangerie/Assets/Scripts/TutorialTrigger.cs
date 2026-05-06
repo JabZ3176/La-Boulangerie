@@ -2,26 +2,24 @@
 
 public class TutorialTrigger : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // SETTINGS
-    // ─────────────────────────────────────────────
+    #region SETTINGS
     [Header("Settings")]
-    public int panelIndex;  // which panel to show (0 = movement, 1 = ingredient etc)
+    public int panelIndex;
+    #endregion
 
-    private bool hasTriggered = false;  // stops it triggering twice
+    #region PRIVATE VARIABLES
+    private bool hasTriggered = false;
     private TutorialManager tutorialManager;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // START
-    // ─────────────────────────────────────────────
+    #region START
     void Start()
     {
-        tutorialManager = FindObjectOfType<TutorialManager>();
+        tutorialManager = Object.FindFirstObjectByType<TutorialManager>();
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // TRIGGER — fires when player enters the zone
-    // ─────────────────────────────────────────────
+    #region TRIGGER
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !hasTriggered)
@@ -30,4 +28,5 @@ public class TutorialTrigger : MonoBehaviour
             tutorialManager.ShowPanelByIndex(panelIndex);
         }
     }
+    #endregion
 }

@@ -1,33 +1,36 @@
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
+    #region AUDIO
+
     [Header("Audio")]
     public Slider audioSlider;
-    public AudioSource musicSource;
+
+    #endregion
+
+    #region BRIGHTNESS
 
     [Header("Brightness")]
     public Slider brightnessSlider;
     public CanvasGroup darkOverlay;
     public CanvasGroup lightOverlay;
 
+    #endregion
+
+    #region REFERENCES
+
+    [Header("References")]
     public GameObject container;
     public GameObject SettingsContainter;
 
-    private float baseVolume; // your 0.02
+    #endregion
 
-    void Awake()
-    {
-        // Store the volume you set in Inspector (0.02)
-        baseVolume = musicSource.volume;
-    }
+    #region START
 
     void Start()
     {
-        baseVolume = musicSource.volume;
-
         float savedAudio = PlayerPrefs.GetFloat("Audio", 50f);
         audioSlider.SetValueWithoutNotify(savedAudio);
         ApplyAudio(savedAudio);
@@ -40,18 +43,30 @@ public class SettingsManager : MonoBehaviour
         brightnessSlider.onValueChanged.AddListener(ApplyBrightness);
     }
 
+    #endregion
+
+    #region AUDIO
+
     public void ApplyAudio(float value)
     {
-        // Convert slider (0–100) into multiplier
-        float multiplier = value / 50f;
+        float normalized = value / 100f;
 
-        // 50 = 1x (your base volume)
-        // 100 = 2x louder
-        // 0 = silent
-        musicSource.volume = baseVolume * multiplier;
+        float musicVolume = normalized * 0.08f;
+        float sfxVolume = normalized * 1f;
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.SetMusicVolume(musicVolume);
+            SoundManager.Instance.SetSFXVolume(sfxVolume);
+        }
 
         PlayerPrefs.SetFloat("Audio", value);
+        PlayerPrefs.Save();
     }
+
+    #endregion
+
+    #region BRIGHTNESS
 
     public void ApplyBrightness(float value)
     {
@@ -69,7 +84,12 @@ public class SettingsManager : MonoBehaviour
         }
 
         PlayerPrefs.SetFloat("Brightness", value);
+        PlayerPrefs.Save();
     }
+
+    #endregion
+
+    #region BUTTONS
 
     public void BackButton()
     {
@@ -77,4 +97,5 @@ public class SettingsManager : MonoBehaviour
         SettingsContainter.SetActive(false);
     }
 
+    #endregion
 }

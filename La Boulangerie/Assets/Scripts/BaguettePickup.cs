@@ -2,36 +2,31 @@
 
 public class BaguettePickup : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // SETTINGS
-    // ─────────────────────────────────────────────
+    #region SETTINGS
     [Header("Respawn Settings")]
     public float respawnTime = 30f;
 
     [Header("Sound")]
-    public AudioClip pickupSound;   // drag your pickup sound here
+    public AudioClip pickupSound;
     public float volume = 1f;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PRIVATE VARIABLES
-    // ─────────────────────────────────────────────
+    #region PRIVATE VARIABLES
     private SpriteRenderer spriteRenderer;
     private Collider2D col;
     private bool isCollected = false;
     private float respawnTimer = 0f;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // START
-    // ─────────────────────────────────────────────
+    #region START
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         col = GetComponent<Collider2D>();
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // UPDATE
-    // ─────────────────────────────────────────────
+    #region UPDATE
     void Update()
     {
         if (!isCollected) return;
@@ -43,10 +38,9 @@ public class BaguettePickup : MonoBehaviour
             Respawn();
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // TRIGGER
-    // ─────────────────────────────────────────────
+    #region TRIGGER
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !isCollected)
@@ -56,17 +50,15 @@ public class BaguettePickup : MonoBehaviour
             {
                 if (player.AddBaguette())
                 {
-                    // play sound on pickup
                     PlayPickupSound();
                     Collect();
                 }
             }
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // PLAY SOUND
-    // ─────────────────────────────────────────────
+    #region SOUND PLAYBACK
     private void PlayPickupSound()
     {
         if (pickupSound != null)
@@ -74,10 +66,9 @@ public class BaguettePickup : MonoBehaviour
             AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
         }
     }
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // COLLECT
-    // ─────────────────────────────────────────────
+    #region PICKUP STATE
     private void Collect()
     {
         isCollected = true;
@@ -86,9 +77,6 @@ public class BaguettePickup : MonoBehaviour
         col.enabled = false;
     }
 
-    // ─────────────────────────────────────────────
-    // RESPAWN
-    // ─────────────────────────────────────────────
     private void Respawn()
     {
         isCollected = false;
@@ -96,4 +84,5 @@ public class BaguettePickup : MonoBehaviour
         spriteRenderer.enabled = true;
         col.enabled = true;
     }
+    #endregion
 }

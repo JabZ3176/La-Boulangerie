@@ -1,46 +1,82 @@
 ﻿using UnityEngine;
 
-public class IngredientBob : MonoBehaviour
+public class IngredientBobRotate : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // SETTINGS
-    // ─────────────────────────────────────────────
-    [Header("Bob Settings")]
-    public float bobHeight = 0.2f;  // how high the ingredient bobs
-    public float bobSpeed = 2f;     // how fast it bobs
+    #region BOB
 
-    // ─────────────────────────────────────────────
-    // PRIVATE VARIABLES
-    // ─────────────────────────────────────────────
-    private float startY;       // saves the starting Y position
-    private float bobOffset;    // random offset so ingredients dont all bob in sync
+    [Header("Bob")]
+    public float bobHeight = 0.2f;
+    public float bobSpeed = 2f;
 
-    // ─────────────────────────────────────────────
-    // START
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region ROTATION
+
+    [Header("Rotation")]
+    public float rotationAmount = 15f;
+    public float rotationSpeed = 2f;
+
+    #endregion
+
+    #region GLINT
+
+    [Header("Glint")]
+    public Transform glint;
+    public float glintSpeed = 2f;
+    public float glintMaxScale = 1f;
+
+    #endregion
+
+    #region PRIVATE VARIABLES
+
+    private float startY;
+    private float offset;
+    private Vector3 glintStartScale;
+
+    #endregion
+
+    #region START
+
     void Start()
     {
-        // save the local Y position as the starting point
         startY = transform.localPosition.y;
+        offset = Random.Range(0f, Mathf.PI * 2f);
 
-        // give each ingredient a random offset so they dont all move together
-        bobOffset = Random.Range(0f, Mathf.PI * 2f);
+        if (glint != null)
+        {
+            glintStartScale = glint.localScale;
+            glint.localScale = Vector3.zero;
+        }
     }
 
-    // ─────────────────────────────────────────────
-    // UPDATE
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region UPDATE
+
     void Update()
     {
-        // calculate smooth up and down movement using a sine wave
-        float newY = startY + Mathf.Sin(
-            (Time.time * bobSpeed) + bobOffset) * bobHeight;
+        float wave = Mathf.Sin((Time.time * bobSpeed) + offset);
 
-        // apply only the Y change keeping X and Z the same
         transform.localPosition = new Vector3(
             transform.localPosition.x,
-            newY,
+            startY + wave * bobHeight,
             transform.localPosition.z
         );
+
+        transform.localRotation = Quaternion.Euler(
+            0f,
+            0f,
+            wave * rotationAmount
+        );
+
+        if (glint != null)
+        {
+            float glintWave = Mathf.PingPong((Time.time * glintSpeed) + offset, 1f);
+            float scale = Mathf.Sin(glintWave * Mathf.PI) * glintMaxScale;
+
+            glint.localScale = glintStartScale * scale;
+        }
     }
+
+    #endregion
 }

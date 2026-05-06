@@ -3,43 +3,46 @@ using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // SINGLETON
-    // ─────────────────────────────────────────────
+    #region SINGLETON
+
     public static SoundManager Instance;
 
-    // ─────────────────────────────────────────────
-    // UI SOUNDS
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region UI SOUNDS
+
     [Header("UI Sounds")]
     public AudioClip buttonClick;
     public AudioClip buttonHover;
 
-    // ─────────────────────────────────────────────
-    // MUSIC
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region MUSIC
+
     [Header("Music")]
-    public AudioClip mainMenuMusic;     // drag main menu music here
-    public AudioClip level1Music;       // drag level 1 music here
-    public AudioClip level2Music;       // drag level 2 music here
-    public AudioClip level3Music;       // drag level 3 music here
-    public AudioClip tutorialMusic;     // drag tutorial music here
+    public AudioClip mainMenuMusic;
+    public AudioClip level1Music;
+    public AudioClip level2Music;
+    public AudioClip level3Music;
+    public AudioClip tutorialMusic;
 
     [Header("Music Settings")]
-    public float musicVolume = 0.5f;    // overall music volume
-    public float sfxVolume = 1f;        // overall sfx volume
-    public float fadeDuration = 1f;     // how long music fades in and out
+    public float musicVolume = 0.01f;
+    public float sfxVolume = 0.1f;
+    public float fadeDuration = 1f;
 
-    // ─────────────────────────────────────────────
-    // PRIVATE VARIABLES
-    // ─────────────────────────────────────────────
-    private AudioSource musicSource;    // plays background music
-    private AudioSource sfxSource;      // plays sound effects
-    private Coroutine fadeCoroutine;    // reference to the fade coroutine
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // AWAKE
-    // ─────────────────────────────────────────────
+    #region PRIVATE VARIABLES
+
+    private AudioSource musicSource;
+    private AudioSource sfxSource;
+    private Coroutine fadeCoroutine;
+
+    #endregion
+
+    #region AWAKE
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -51,10 +54,14 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // create two separate audio sources
-        // one for music, one for sfx
+        float savedSlider = PlayerPrefs.GetFloat("Audio", 50f);
+        float normalized = savedSlider / 100f;
+
+        musicVolume = normalized * 0.08f;
+        sfxVolume = normalized * 1f;
+
         musicSource = gameObject.AddComponent<AudioSource>();
-        musicSource.loop = true;            // music always loops
+        musicSource.loop = true;
         musicSource.playOnAwake = false;
         musicSource.volume = musicVolume;
 
@@ -62,16 +69,15 @@ public class SoundManager : MonoBehaviour
         sfxSource.playOnAwake = false;
         sfxSource.volume = sfxVolume;
 
-        // listen for scene changes to swap music
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // ─────────────────────────────────────────────
-    // ON SCENE LOADED — swaps music when scene changes
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region SCENE MUSIC
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // pick the right music for each scene
         AudioClip newMusic = null;
 
         if (scene.name == "MainMenu")
@@ -85,16 +91,12 @@ public class SoundManager : MonoBehaviour
         else if (scene.name == "Level3")
             newMusic = level3Music;
 
-        // only swap if the music is different from what is playing
         if (newMusic != null && newMusic != musicSource.clip)
         {
             PlayMusic(newMusic);
         }
     }
 
-    // ─────────────────────────────────────────────
-    // PLAY MUSIC — fades out old music and fades in new
-    // ─────────────────────────────────────────────
     public void PlayMusic(AudioClip clip)
     {
         if (fadeCoroutine != null)
@@ -105,37 +107,48 @@ public class SoundManager : MonoBehaviour
 
     private System.Collections.IEnumerator FadeMusic(AudioClip newClip)
     {
-        // fade out current music
-        float startVolume = musicSource.volume;
         float elapsed = 0f;
+        float startVolume = musicSource.volume;
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.unscaledDeltaTime; // use unscaled so it works when paused
-            musicSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeDuration);
+            elapsed += Time.unscaledDeltaTime;
+
+            musicSource.volume = Mathf.Lerp(
+                startVolume,
+                0f,
+                elapsed / fadeDuration
+            );
+
             yield return null;
         }
 
-        // swap the clip
         musicSource.Stop();
         musicSource.clip = newClip;
         musicSource.Play();
 
-        // fade in new music
         elapsed = 0f;
+
         while (elapsed < fadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-            musicSource.volume = Mathf.Lerp(0f, musicVolume, elapsed / fadeDuration);
+
+            musicSource.volume = Mathf.Lerp(
+                0f,
+                musicVolume,
+                elapsed / fadeDuration
+            );
+
             yield return null;
         }
 
         musicSource.volume = musicVolume;
     }
 
-    // ─────────────────────────────────────────────
-    // UI SOUNDS
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region UI SOUNDS
+
     public void PlayClick()
     {
         if (buttonClick != null)
@@ -148,39 +161,54 @@ public class SoundManager : MonoBehaviour
             sfxSource.PlayOneShot(buttonHover, sfxVolume);
     }
 
-    // ─────────────────────────────────────────────
-    // VOLUME CONTROL — call these from a settings menu
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region VOLUME CONTROL
+
     public void SetMusicVolume(float volume)
     {
         musicVolume = volume;
-        musicSource.volume = volume;
+
+        if (musicSource != null)
+        {
+            musicSource.volume = musicVolume;
+        }
     }
 
     public void SetSFXVolume(float volume)
     {
         sfxVolume = volume;
-        sfxSource.volume = volume;
+
+        if (sfxSource != null)
+        {
+            sfxSource.volume = sfxVolume;
+        }
     }
 
-    // ─────────────────────────────────────────────
-    // PAUSE AND RESUME MUSIC — call from PauseMenu.cs
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region PAUSE MUSIC
+
     public void PauseMusic()
     {
-        musicSource.Pause();
+        if (musicSource != null)
+            musicSource.Pause();
     }
 
     public void ResumeMusic()
     {
-        musicSource.UnPause();
+        if (musicSource != null)
+            musicSource.UnPause();
     }
 
-    // ─────────────────────────────────────────────
-    // CLEANUP
-    // ─────────────────────────────────────────────
+    #endregion
+
+    #region CLEANUP
+
     void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+    #endregion
 }

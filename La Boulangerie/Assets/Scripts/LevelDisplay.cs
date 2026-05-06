@@ -4,22 +4,16 @@ using TMPro;
 
 public class LevelDisplay : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // REFERENCES
-    // ─────────────────────────────────────────────
+    #region REFERENCES
     [Header("References")]
-    public TextMeshProUGUI levelText; // drag LevelText here in the Inspector
+    public TextMeshProUGUI levelText;
+    #endregion
 
-    // ─────────────────────────────────────────────
-    // START — runs once when the scene loads
-    // ─────────────────────────────────────────────
+    #region START
     void Start()
     {
-        // get the current scene name and display it
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // convert scene name to a friendly display name
-        // add more scenes here as you create them
         if (currentScene == "Level1")
             levelText.text = "Level 1";
         else if (currentScene == "Level2")
@@ -27,6 +21,7 @@ public class LevelDisplay : MonoBehaviour
         else if (currentScene == "Level3")
             levelText.text = "Level 3";
         else
-            levelText.text = currentScene; // fallback — just shows the scene name
+            levelText.text = currentScene;
     }
+    #endregion
 }

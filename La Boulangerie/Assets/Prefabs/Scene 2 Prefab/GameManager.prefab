@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6513453487246356499
+--- !u!1 &2201799051789683426
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5769530254640383615}
-  - component: {fileID: 4455070008801489040}
+  - component: {fileID: 789511140429754083}
+  - component: {fileID: 1405641285598412677}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -17,39 +17,45 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5769530254640383615
+--- !u!4 &789511140429754083
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6513453487246356499}
+  m_GameObject: {fileID: 2201799051789683426}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.25367, y: -9.97637, z: 0}
+  m_LocalPosition: {x: 256, y: 144, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4455070008801489040
+--- !u!114 &1405641285598412677
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6513453487246356499}
+  m_GameObject: {fileID: 2201799051789683426}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e403c936079a7f4b8d65bfd7d904eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  itemsToCollect:
-  - Ingredient1
-  - Ingredient2
-  - Ingredient3
-  - Ingredient4
-  itemListParent: {fileID: 0}
-  itemEntryPrefab: {fileID: 538669046650526824, guid: 996a51fecfb41fd43b2fb1ae71cb6a85, type: 3}
+  totalFlour: 3
+  totalMilk: 3
+  totalButter: 3
+  minFlour: 2
+  minMilk: 2
+  minButter: 1
+  ingredientPanel: {fileID: 0}
+  flourCountText: {fileID: 0}
+  milkCountText: {fileID: 0}
+  butterCountText: {fileID: 0}
+  flourIcon: {fileID: 0}
+  milkIcon: {fileID: 0}
+  butterIcon: {fileID: 0}
   unlockPanel: {fileID: 0}
   door: {fileID: 0}

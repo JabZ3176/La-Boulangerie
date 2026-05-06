@@ -2,22 +2,26 @@
 
 public class BaguetteProjectile : MonoBehaviour
 {
+    #region SETTINGS
     [Header("Settings")]
     public float speed = 10f;
     public float lifetime = 3f;
     public int damage = 2;
+    #endregion
 
+    #region PRIVATE VARIABLES
     private Rigidbody2D rb;
     private Vector2 direction;
-    private bool hasHit = false; // guard so it can only hit once
+    private bool hasHit = false;
+    #endregion
 
+    #region LAUNCH
     public void Launch(Vector2 throwDirection, bool isJumping)
     {
         rb = GetComponent<Rigidbody2D>();
 
         if (isJumping)
         {
-            // full gravity for jump throw so it arcs nicely
             rb.gravityScale = 1f;
             rb.linearVelocity = new Vector2(
                 throwDirection.x * speed,
@@ -26,7 +30,6 @@ public class BaguetteProjectile : MonoBehaviour
         }
         else
         {
-            // very low gravity for ground throw so it flies straight
             rb.gravityScale = 0.1f;
             rb.linearVelocity = new Vector2(
                 throwDirection.x * speed,
@@ -41,21 +44,21 @@ public class BaguetteProjectile : MonoBehaviour
 
         Destroy(gameObject, lifetime);
     }
+    #endregion
 
+    #region TRIGGERS
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // stop if already hit something
         if (hasHit) return;
 
         if (other.CompareTag("Enemy"))
         {
-            // only process the trigger collider not the physical one
             if (!other.isTrigger) return;
 
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                hasHit = true; // mark as hit so it cant hit again
+                hasHit = true;
                 enemy.TakeDamage(damage);
             }
             Destroy(gameObject);
@@ -72,4 +75,5 @@ public class BaguetteProjectile : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    #endregion
 }
