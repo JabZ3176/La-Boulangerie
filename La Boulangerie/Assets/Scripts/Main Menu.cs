@@ -15,10 +15,14 @@ public class MainMenu : MonoBehaviour
         if (PlayerPrefs.GetString("CurrentLevel", "") == "")
         {
             continueButton.interactable = false;
-            TMPro.TextMeshProUGUI label = continueButton
-                .GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (label != null)
-                label.color = new Color(1f, 1f, 1f, 0.3f);
+            Graphic[] graphics = continueButton.GetComponentsInChildren<Graphic>();
+
+            foreach (Graphic graphic in graphics)
+            {
+                Color color = graphic.color;
+                color.a = 0.3f;
+                graphic.color = color;
+            }
         }
         else
         {
