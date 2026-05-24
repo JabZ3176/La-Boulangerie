@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 390641251036801511}
   - component: {fileID: 8662743771517005807}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shadow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3f3da31dc45689649bc8956ae04f5cc9, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
@@ -100,7 +100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 157567006887302616}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8031183139885257548}
   - component: {fileID: 8719353634719981241}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shadow 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,9 +200,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3f3da31dc45689649bc8956ae04f5cc9, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
@@ -223,7 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8676387003959243092}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Baguette 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,7 +256,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4957201589457746171}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Baguettes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,7 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7259054558532942120}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5250766534968734918}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1275840481848980574}
   - component: {fileID: 5961365140803210673}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shadow 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +371,7 @@ Transform:
   m_GameObject: {fileID: 7977383734239551853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 28.925003, y: -0.5876703, z: 0}
+  m_LocalPosition: {x: 28.925003, y: -0.532, z: 0}
   m_LocalScale: {x: 0.08227, y: 0.016859999, z: 3.2841198}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -422,9 +422,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3f3da31dc45689649bc8956ae04f5cc9, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
@@ -445,7 +445,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7260532308763888650}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Baguette 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +478,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4478981711034731795}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Baguette 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -550,6 +550,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5594071374739147582, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7191419259590544978, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
       propertyPath: m_Name
       value: Baguette
@@ -612,6 +616,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5594071374739147582, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7191419259590544978, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
       propertyPath: m_Name
       value: Baguette
@@ -673,6 +681,10 @@ PrefabInstance:
     - target: {fileID: 2630253976293554060, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5594071374739147582, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7191419259590544978, guid: 1bd25f449de320f4f893616ffda1fc5c, type: 3}
       propertyPath: m_Name

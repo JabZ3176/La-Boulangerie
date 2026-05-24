@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6547489388909399282}
   - component: {fileID: 8308211188026000704}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CobbleLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
+  m_SortingLayerID: 1507233113
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 583798541, guid: 18974d7af116fdf4d99c0c3bb5bbad4e, type: 3}
   m_Color: {r: 0.6367924, g: 0.8451026, b: 1, a: 1}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2043110329543601391}
   - component: {fileID: 1550490245415086627}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CobbleMiddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,9 +168,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
+  m_SortingLayerID: 1507233113
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 870229101, guid: 18974d7af116fdf4d99c0c3bb5bbad4e, type: 3}
   m_Color: {r: 0.6367924, g: 0.8451026, b: 1, a: 1}
@@ -191,7 +191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4593141687726331489}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 2732319780082396585}
   - component: {fileID: 7949741690675521273}
   - component: {fileID: 4969412611749966754}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,9 +348,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 817482639761771721}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Moving Platform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -383,7 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3721582058318326107}
   - component: {fileID: 6016008907005121131}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CobbleRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,9 +450,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
+  m_SortingLayerID: 1507233113
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 583798541, guid: 18974d7af116fdf4d99c0c3bb5bbad4e, type: 3}
   m_Color: {r: 0.6367924, g: 0.8451026, b: 1, a: 1}
@@ -473,7 +473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7660377413670021085}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

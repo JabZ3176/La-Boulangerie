@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2815880982124442512}
   - component: {fileID: 898418954996716803}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7219898688034065442}
   - component: {fileID: 8375590146733364605}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1352554899983559274}
   - component: {fileID: 1081002237500828524}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,8 +246,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -270,7 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1057420047444711952}
   - component: {fileID: 7128975569029335485}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,8 +338,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -362,7 +362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5891377299751715270}
   - component: {fileID: 8809013161928663846}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,8 +430,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -454,7 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3077449903180148902}
   - component: {fileID: 5754102079501945804}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,8 +522,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -546,7 +546,7 @@ GameObject:
   m_Component:
   - component: {fileID: 798443000454669999}
   - component: {fileID: 469866274690504481}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,8 +614,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -638,7 +638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4438643551500891704}
   - component: {fileID: 1178846509221248658}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,8 +706,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -730,7 +730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 164921124430290719}
   - component: {fileID: 6480628285342238855}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -814,7 +814,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1362921656444848300}
   - component: {fileID: 4683343526156010230}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -882,8 +882,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -906,7 +906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7011016372820334606}
   - component: {fileID: 5735001435364929316}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire
   m_TagString: Damage
   m_Icon: {fileID: 0}
@@ -992,7 +992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7643067612847603425}
   - component: {fileID: 5130114707952802787}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -1076,7 +1076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7695477202869892992}
   - component: {fileID: 6839552687994256910}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1118,7 +1118,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659598dd659172ccc54
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -1160,7 +1160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6560119937503773682}
   - component: {fileID: 8666249496524006489}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Fire (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1228,8 +1228,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1507233113
-  m_SortingLayer: 2
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
@@ -1252,7 +1252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583787155207381093}
   - component: {fileID: 1283956717118789992}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1294,7 +1294,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -1336,7 +1336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9117750194260237419}
   - component: {fileID: 9102973347393282046}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1
@@ -1420,7 +1420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4767533467937504084}
   - component: {fileID: 8021148535501036483}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: FireLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1462,7 +1462,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000008fad6659172ccc54598dd659
+  m_ApplyToSortingLayers: 00000000f950a7bd8fad6659598dd6596791c5f8172ccc54633607aad78afd7f4769aa4c
   m_LightCookieSprite: {fileID: 21300000, guid: f9f99319fea0afe469479948590e0bea, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: -1

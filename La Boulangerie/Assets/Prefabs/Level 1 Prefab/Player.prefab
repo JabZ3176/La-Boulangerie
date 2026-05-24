@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8875280580409639871}
   - component: {fileID: 164499756458350324}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
-  m_SortingOrder: 1
+  m_SortingLayerID: -121269913
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3f3da31dc45689649bc8956ae04f5cc9, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 8465508355333441930}
   - component: {fileID: 8421283306514541567}
   - component: {fileID: 890813090372278737}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -175,9 +175,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 1422666775
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayerID: -1442367901
+  m_SortingLayer: 6
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2a2d5f56d6f405548b834b80b51bf4e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -246,7 +246,7 @@ MonoBehaviour:
   croissantDrainRate: 20
   croissantRechargeRate: 10
   croissantMinToSprint: 10
-  baguettePrefab: {fileID: 9035268342441051912, guid: 64374c9483a091d4bbfefed691cdb31b, type: 3}
+  baguettePrefab: {fileID: 1583185029424426331, guid: dd9c826852834e844848ec95b55c7709, type: 3}
   throwPoint: {fileID: 8638995841182731992}
   throwCooldown: 0.5
   maxBaguettes: 3
@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3684369154803065693}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8638995841182731992}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ThrowPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,8 +388,8 @@ Transform:
   m_GameObject: {fileID: 6410853963887575948}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6, y: -1.47, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.759, y: -0.81, z: 0}
+  m_LocalScale: {x: 1, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5819998263597729664}

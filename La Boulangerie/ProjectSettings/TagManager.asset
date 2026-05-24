@@ -14,12 +14,12 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
-  - Enemy
-  - Background
   - Player
-  - Projectile
-  - 
+  - Enemy
+  - Ground
+  - Interactables
+  - Projectiles
+  - Damage
   - 
   - 
   - 
@@ -45,13 +45,28 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Background
+    uniqueID: 3181859065
+    locked: 0
+  - name: BackDetails
     uniqueID: 1499901327
     locked: 0
-  - name: Fire
+  - name: Environment
     uniqueID: 1507233113
     locked: 0
-  - name: Environement
+  - name: Foreground
+    uniqueID: 4173697383
+    locked: 0
+  - name: Interactables
     uniqueID: 1422666775
+    locked: 0
+  - name: Characters
+    uniqueID: 2852599395
+    locked: 0
+  - name: Projectiles
+    uniqueID: 2147322583
+    locked: 0
+  - name: UI
+    uniqueID: 1286236487
     locked: 0
   m_RenderingLayers:
   - Default
