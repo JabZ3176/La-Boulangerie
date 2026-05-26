@@ -118,7 +118,6 @@ public class Player : MonoBehaviour
     #region START
     void Start()
     {
-
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -185,6 +184,14 @@ public class Player : MonoBehaviour
             {
                 isSlamming = false;
             }
+
+            // play landing sound when player hits the ground
+            // only play if falling fast enough to feel like a real landing
+            if (rb.linearVelocity.y < -2f)
+            {
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlayPlayerFallHit();
+            }
         }
     }
     #endregion
@@ -196,14 +203,12 @@ public class Player : MonoBehaviour
 
         if (shiftHeld && currentCroissantEnergy >= croissantMinToSprint)
         {
-
             isSprinting = true;
             currentCroissantEnergy -= croissantDrainRate * Time.deltaTime;
             currentCroissantEnergy = Mathf.Max(currentCroissantEnergy, 0f);
         }
         else
         {
-
             isSprinting = false;
             currentCroissantEnergy += croissantRechargeRate * Time.deltaTime;
             currentCroissantEnergy = Mathf.Min(currentCroissantEnergy, maxCroissantEnergy);
@@ -214,7 +219,6 @@ public class Player : MonoBehaviour
     #region MOVEMENT
     private void HandleMovement()
     {
-
         if (isSlamming) return;
 
         float moveInput = Input.GetAxis("Horizontal");
@@ -238,10 +242,10 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    #region FOOTSTEPS
     public void PlayFootstep()
     {
         if (!isGrounded) return;
-
         if (footstepSounds.Length == 0) return;
 
         int index = Random.Range(0, footstepSounds.Length);
@@ -252,11 +256,11 @@ public class Player : MonoBehaviour
             footstepVolume
         );
     }
+    #endregion
 
     #region JUMP
     private void HandleJump()
     {
-
         bool canJump = isGrounded || IsStandingOnEnemy();
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -287,7 +291,6 @@ public class Player : MonoBehaviour
 
     private bool IsStandingOnEnemy()
     {
-
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             groundCheck.position,
             groundCheckRadius + 0.1f,
@@ -307,6 +310,9 @@ public class Player : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         isJumping = true;
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayPlayerJump();
     }
     #endregion
 
@@ -316,13 +322,16 @@ public class Player : MonoBehaviour
         bool slamKeyPressed = Input.GetKeyDown(KeyCode.S) ||
                               Input.GetKeyDown(KeyCode.DownArrow);
 
-        bool isFallingOrJumping = Mathf.Abs(rb.linearVelocity.y) > 0.5f;
+        Debug.Log("Slam check — key: " + slamKeyPressed +
+                  " isSlamming: " + isSlamming +
+                  " isGrounded: " + isGrounded);
 
-        if (slamKeyPressed && !isSlamming && !isGrounded && isFallingOrJumping)
-        {
-            StartCoroutine(PerformSlam());
-            StartCoroutine(SlamInvincibility());
-        }
+        if (!slamKeyPressed) return;
+        if (isSlamming) return;
+        if (isGrounded) return;
+
+        StartCoroutine(PerformSlam());
+        StartCoroutine(SlamInvincibility());
     }
 
     private IEnumerator PerformSlam()
@@ -346,7 +355,6 @@ public class Player : MonoBehaviour
 
         foreach (Collider2D col in hitColliders)
         {
-
             if (!col.isTrigger) continue;
 
             Enemy enemy = col.GetComponent<Enemy>();
@@ -360,15 +368,15 @@ public class Player : MonoBehaviour
 
         if (hitEnemy)
         {
-
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
-
             isSlamming = false;
-
             RegisterStomp();
         }
         else
         {
+            // play fall hit sound when slamming into the ground
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlayPlayerFallHit();
 
             isSlamming = false;
         }
@@ -376,7 +384,6 @@ public class Player : MonoBehaviour
 
     private IEnumerator SlamInvincibility()
     {
-
         if (!isBuffActive)
         {
             isInvincible = true;
@@ -393,10 +400,8 @@ public class Player : MonoBehaviour
     #region BAGUETTE THROW
     private void HandleBaguetteThrow()
     {
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
-
             if (currentBaguettes > 0 &&
                 Time.time - lastThrowTime >= throwCooldown)
             {
@@ -412,6 +417,9 @@ public class Player : MonoBehaviour
 
         if (baguetteUI != null)
             baguetteUI.UpdateSlots(currentBaguettes);
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayBaguetteThrow();
 
         Vector2 throwDirection = spriteRenderer.flipX ?
             Vector2.left : Vector2.right;
@@ -442,7 +450,6 @@ public class Player : MonoBehaviour
 
     public bool AddBaguette()
     {
-
         if (currentBaguettes >= maxBaguettes) return false;
 
         currentBaguettes++;
@@ -457,18 +464,15 @@ public class Player : MonoBehaviour
     #region IDLE TIMER
     private void HandleIdleTimer()
     {
-
         bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f;
         bool isActive = isMoving || !isGrounded || isSlamming;
 
         if (isActive)
         {
-
             idleTimer = 0f;
         }
         else
         {
-
             idleTimer += Time.deltaTime;
         }
 
@@ -482,7 +486,6 @@ public class Player : MonoBehaviour
     #region STOMP BUFF
     private void HandleBuff()
     {
-
         if (!isBuffActive) return;
 
         buffTimer -= Time.deltaTime;
@@ -495,7 +498,6 @@ public class Player : MonoBehaviour
 
     public void RegisterStomp()
     {
-
         if (isBuffActive) return;
 
         currentStompChain++;
@@ -509,7 +511,6 @@ public class Player : MonoBehaviour
 
     public void ResetStompChain()
     {
-
         currentStompChain = 0;
         Debug.Log("Stomp chain reset!");
     }
@@ -562,7 +563,6 @@ public class Player : MonoBehaviour
 
     private IEnumerator BuffFlash()
     {
-
         yield return new WaitForSeconds(buffDuration - 5f);
 
         while (isBuffActive)
@@ -578,7 +578,6 @@ public class Player : MonoBehaviour
     #region UI UPDATES
     private void UpdateHealthUI()
     {
-
         if (heartHealthBar != null)
         {
             heartHealthBar.UpdateHearts(health);
@@ -587,7 +586,6 @@ public class Player : MonoBehaviour
 
     private void UpdateCroissantUI()
     {
-
         if (croissantMeter != null)
         {
             croissantMeter.UpdateCroissants(currentCroissantEnergy, maxCroissantEnergy);
@@ -598,7 +596,6 @@ public class Player : MonoBehaviour
     #region DAMAGE AND DEATH
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
         if (collision.gameObject.CompareTag(DamageTag))
         {
             TakeDamage();
@@ -607,7 +604,6 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
-
         if (isDead || isInvincible) return;
 
         health -= 1;
@@ -633,9 +629,12 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-
         if (isDead) return;
         isDead = true;
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayPlayerFall();
+
         deathMenu.ToggleDeathScreen();
     }
     #endregion

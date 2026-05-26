@@ -151,16 +151,17 @@ public class Enemy : MonoBehaviour
     private void DealDamageToPlayer(GameObject playerObject)
     {
         if (isStunned) return;
-
         if (Time.time - lastDamageTime < damageCooldown) return;
 
         lastDamageTime = Time.time;
 
+        // play enemy attack sound
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayEnemyDamage();
+
         Player player = playerObject.GetComponent<Player>();
         if (player != null)
-        {
             player.TakeDamage();
-        }
     }
     #endregion
 
@@ -194,12 +195,15 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= damage;
+
+        // play enemy hurt sound
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayEnemyHurt();
+
         StartCoroutine(HitFlash());
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     private IEnumerator HitFlash()
