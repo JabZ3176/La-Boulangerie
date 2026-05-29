@@ -28,10 +28,14 @@ public class Player : MonoBehaviour
 
     #region SLAM
     [Header("Slam")]
-    public float slamForce = 20f;
-    public float slamBounceForce = 8f;
-    public float slamRadius = 0.5f;
+    public float slamForce = 25f;
+    public float slamBounceForce = 10f;
+    public float slamRadius = 0.6f;
     public LayerMask enemyLayer;
+
+    private bool isSlamming = false;
+    private bool slamOnCooldown = false;
+    private float slamCooldownTime = 0.3f;
     #endregion
 
     #region CROISSANT ENERGY
@@ -97,10 +101,12 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private bool isJumping;
     private bool isSprinting;
-    private bool isSlamming;
     private bool hasDoubleJump;
     private bool canDoubleJump;
     private float currentCroissantEnergy;
+    private bool slamLanded = false;
+    private float fallTimer = 0f;          // tracks how long the player has been falling
+    private bool isFalling = false;        // tracks if the player is currently falling
 
     private float originalMoveSpeed;
     private float originalSprintSpeed;
@@ -160,6 +166,9 @@ public class Player : MonoBehaviour
 
         if (transform.position.y < killHeight)
         {
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlayPlayerFall();
+
             Die();
         }
     }
@@ -179,19 +188,18 @@ public class Player : MonoBehaviour
         if (!wasGrounded && isGrounded)
         {
             hasDoubleJump = canDoubleJump;
+        }
 
-            if (isSlamming)
-            {
-                isSlamming = false;
-            }
-
-            // play landing sound when player hits the ground
-            // only play if falling fast enough to feel like a real landing
-            if (rb.linearVelocity.y < -2f)
-            {
-                if (SoundManager.Instance != null)
-                    SoundManager.Instance.PlayPlayerFallHit();
-            }
+        // track falling time using velocity
+        if (rb.linearVelocity.y < -0.5f)
+        {
+            fallTimer += Time.fixedDeltaTime;
+            isFalling = true;
+        }
+        else if (rb.linearVelocity.y > 0.1f)
+        {
+            fallTimer = 0f;
+            isFalling = false;
         }
     }
     #endregion
@@ -226,19 +234,20 @@ public class Player : MonoBehaviour
 
         rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
 
-        if (moveInput > 0)
+        // instantly stop horizontal movement when no input is pressed
+        // this removes the floaty sliding feeling
+        if (Mathf.Abs(moveInput) < 0.1f && isGrounded)
         {
-            spriteRenderer.flipX = false;
-        }
-        else if (moveInput < 0)
-        {
-            spriteRenderer.flipX = true;
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         }
 
+        if (moveInput > 0)
+            spriteRenderer.flipX = false;
+        else if (moveInput < 0)
+            spriteRenderer.flipX = true;
+
         if (animator != null)
-        {
             animator.SetFloat("Run", Mathf.Abs(moveInput));
-        }
     }
     #endregion
 
@@ -249,12 +258,7 @@ public class Player : MonoBehaviour
         if (footstepSounds.Length == 0) return;
 
         int index = Random.Range(0, footstepSounds.Length);
-
-        AudioSource.PlayClipAtPoint(
-            footstepSounds[index],
-            transform.position,
-            footstepVolume
-        );
+        AudioSource.PlayClipAtPoint(footstepSounds[index], transform.position, footstepVolume);
     }
     #endregion
 
@@ -322,78 +326,50 @@ public class Player : MonoBehaviour
         bool slamKeyPressed = Input.GetKeyDown(KeyCode.S) ||
                               Input.GetKeyDown(KeyCode.DownArrow);
 
-        Debug.Log("Slam check — key: " + slamKeyPressed +
-                  " isSlamming: " + isSlamming +
-                  " isGrounded: " + isGrounded);
-
         if (!slamKeyPressed) return;
         if (isSlamming) return;
-        if (isGrounded) return;
+        if (slamOnCooldown) return;
+
+        // only block slam if clearly standing still on the ground
+        // if the player has any upward or downward velocity they are in the air
+        if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.1f) return;
 
         StartCoroutine(PerformSlam());
-        StartCoroutine(SlamInvincibility());
     }
 
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
+        slamOnCooldown = true;
 
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, -slamForce);
-
-        yield return new WaitUntil(() =>
-            isGrounded ||
-            Physics2D.OverlapCircle(groundCheck.position, slamRadius, enemyLayer)
-        );
-
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
-            groundCheck.position,
-            slamRadius,
-            enemyLayer
-        );
-
-        bool hitEnemy = false;
-
-        foreach (Collider2D col in hitColliders)
-        {
-            if (!col.isTrigger) continue;
-
-            Enemy enemy = col.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(1);
-                enemy.Stun();
-                hitEnemy = true;
-            }
-        }
-
-        if (hitEnemy)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
-            isSlamming = false;
-            RegisterStomp();
-        }
-        else
-        {
-            // play fall hit sound when slamming into the ground
-            if (SoundManager.Instance != null)
-                SoundManager.Instance.PlayPlayerFallHit();
-
-            isSlamming = false;
-        }
-    }
-
-    private IEnumerator SlamInvincibility()
-    {
         if (!isBuffActive)
-        {
             isInvincible = true;
-            yield return new WaitForSeconds(0.2f);
 
-            if (!isBuffActive)
-            {
-                isInvincible = false;
-            }
+        // force straight down
+        rb.linearVelocity = new Vector2(0f, -slamForce);
+
+        // wait for collision events to fire via OnCollisionEnter2D or OnTriggerEnter2D
+        // slamLanded is set to true by those methods
+        slamLanded = false;
+
+        float timeout = 3f;
+        float elapsed = 0f;
+
+        while (!slamLanded && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
         }
+
+        isSlamming = false;
+
+        yield return new WaitForSeconds(0.2f);
+
+        if (!isBuffActive)
+            isInvincible = false;
+
+        yield return new WaitForSeconds(slamCooldownTime);
+        slamOnCooldown = false;
     }
     #endregion
 
@@ -427,25 +403,15 @@ public class Player : MonoBehaviour
         Vector3 spawnPosition = throwPoint.position;
 
         if (throwDirection == Vector2.left)
-        {
             spawnPosition.x = transform.position.x - Mathf.Abs(throwPoint.localPosition.x);
-        }
         else
-        {
             spawnPosition.x = transform.position.x + Mathf.Abs(throwPoint.localPosition.x);
-        }
 
-        GameObject baguette = Instantiate(
-            baguettePrefab,
-            spawnPosition,
-            Quaternion.identity
-        );
+        GameObject baguette = Instantiate(baguettePrefab, spawnPosition, Quaternion.identity);
 
         BaguetteProjectile projectile = baguette.GetComponent<BaguetteProjectile>();
         if (projectile != null)
-        {
             projectile.Launch(throwDirection, !isGrounded);
-        }
     }
 
     public bool AddBaguette()
@@ -468,18 +434,12 @@ public class Player : MonoBehaviour
         bool isActive = isMoving || !isGrounded || isSlamming;
 
         if (isActive)
-        {
             idleTimer = 0f;
-        }
         else
-        {
             idleTimer += Time.deltaTime;
-        }
 
         if (animator != null)
-        {
             animator.SetFloat("IdleTime", idleTimer);
-        }
     }
     #endregion
 
@@ -491,9 +451,7 @@ public class Player : MonoBehaviour
         buffTimer -= Time.deltaTime;
 
         if (buffTimer <= 0)
-        {
             EndBuff();
-        }
     }
 
     public void RegisterStomp()
@@ -504,9 +462,7 @@ public class Player : MonoBehaviour
         Debug.Log("Stomp chain: " + currentStompChain + "/" + stompsRequired);
 
         if (currentStompChain >= stompsRequired)
-        {
             ActivateBuff();
-        }
     }
 
     public void ResetStompChain()
@@ -579,26 +535,68 @@ public class Player : MonoBehaviour
     private void UpdateHealthUI()
     {
         if (heartHealthBar != null)
-        {
             heartHealthBar.UpdateHearts(health);
-        }
     }
 
     private void UpdateCroissantUI()
     {
         if (croissantMeter != null)
-        {
             croissantMeter.UpdateCroissants(currentCroissantEnergy, maxCroissantEnergy);
-        }
     }
     #endregion
 
     #region DAMAGE AND DEATH
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // normal damage tag
         if (collision.gameObject.CompareTag(DamageTag))
-        {
             TakeDamage();
+
+        // slam landed on ground
+        if (isSlamming && ((groundLayer.value & (1 << collision.gameObject.layer)) != 0))
+        {
+            slamLanded = true;
+
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlayPlayerFallHit();
+
+            fallTimer = 0f;
+            isFalling = false;
+            return;
+        }
+
+        // normal landing after falling for long enough
+        if (((groundLayer.value & (1 << collision.gameObject.layer)) != 0))
+        {
+            if (isFalling && fallTimer >= 0.5f)
+            {
+                Debug.Log("Landing sound! fallTimer: " + fallTimer);
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlayPlayerFallHit();
+            }
+
+            fallTimer = 0f;
+            isFalling = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // slam landed on an enemy trigger
+        if (isSlamming && other.CompareTag("Enemy") && other.isTrigger)
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(1);
+                enemy.Stun();
+                RegisterStomp();
+
+                // bounce up after hitting enemy
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
+            }
+
+            slamLanded = true;
         }
     }
 
@@ -615,9 +613,7 @@ public class Player : MonoBehaviour
         StartCoroutine(BlinkRed());
 
         if (health <= 0)
-        {
             Die();
-        }
     }
 
     private IEnumerator BlinkRed()
@@ -631,10 +627,6 @@ public class Player : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-
-        if (SoundManager.Instance != null)
-            SoundManager.Instance.PlayPlayerFall();
-
         deathMenu.ToggleDeathScreen();
     }
     #endregion
@@ -649,6 +641,10 @@ public class Player : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, slamRadius);
+
+        // draw the fall detection ray
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.2f);
     }
     #endregion
 }

@@ -1,10 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
     #region SETTINGS
     [Header("Hazard Type")]
-    public HazardType hazardType;   // set to Fire or Spike in the Inspector
+    public HazardType hazardType;
 
     public enum HazardType
     {
@@ -13,42 +14,66 @@ public class Hazard : MonoBehaviour
     }
 
     [Header("Damage")]
-    public float damageCooldown = 1f;   // seconds between each hit for fire
-                                        // spikes deal damage instantly on contact
+    public int damageAmount = 1;
+    public float damageCooldown = 0.8f;
     #endregion
 
     #region PRIVATE VARIABLES
-    private float lastDamageTime = -1f;
+    private float lastDamageTime = -999f;
+    private bool playerInside = false;
+    private GameObject playerObject;
     #endregion
 
-    #region TRIGGER
-    private void OnTriggerEnter2D(Collider2D other)
+    #region START
+    void Start()
     {
-        if (other.CompareTag("Player"))
+        // make sure this object has a trigger collider
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+            col.isTrigger = true;
+    }
+    #endregion
+
+    #region UPDATE
+    void Update()
+    {
+        // fire continuously damages while player is inside
+        if (hazardType == HazardType.Fire && playerInside && playerObject != null)
         {
-            DamagePlayer(other.gameObject);
+            if (Time.time - lastDamageTime >= damageCooldown)
+            {
+                DamagePlayer(playerObject);
+            }
         }
     }
+    #endregion
 
-    private void OnTriggerStay2D(Collider2D other)
+    #region TRIGGER EVENTS
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // fire keeps damaging while player stays in it
-        // spikes only damage on first contact so skip stay for spikes
-        if (hazardType == HazardType.Fire && other.CompareTag("Player"))
-        {
-            DamagePlayer(other.gameObject);
-        }
+        if (!other.CompareTag("Player")) return;
+
+        playerInside = true;
+        playerObject = other.gameObject;
+
+        // both fire and spike damage immediately on contact
+        DamagePlayer(other.gameObject);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        playerInside = false;
+        playerObject = null;
     }
     #endregion
 
     #region DAMAGE
-    private void DamagePlayer(GameObject playerObject)
+    private void DamagePlayer(GameObject target)
     {
-        if (Time.time - lastDamageTime < damageCooldown) return;
-
         lastDamageTime = Time.time;
 
-        // play the correct sound for this hazard type
         if (SoundManager.Instance != null)
         {
             if (hazardType == HazardType.Fire)
@@ -57,7 +82,7 @@ public class Hazard : MonoBehaviour
                 SoundManager.Instance.PlaySpikeHit();
         }
 
-        Player player = playerObject.GetComponent<Player>();
+        Player player = target.GetComponent<Player>();
         if (player != null)
             player.TakeDamage();
     }

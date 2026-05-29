@@ -591,7 +591,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!1 &528682478 stripped
 GameObject:
@@ -611,7 +610,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!1 &574656759 stripped
 GameObject:
@@ -631,7 +629,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!114 &585367588
 MonoBehaviour:
@@ -685,7 +682,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!1001 &700336566
 PrefabInstance:
@@ -762,7 +758,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!213 &754857562
 Sprite:
@@ -1088,7 +1083,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!1 &1390279833 stripped
 GameObject:
@@ -1108,7 +1102,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!1 &1712914020 stripped
 GameObject:
@@ -1128,7 +1121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   hazardType: 0
-  damageAmount: 1
   damageCooldown: 1
 --- !u!213 &1811384278
 Sprite:
@@ -2170,7 +2162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8484048358772962106, guid: 68e1a483f5b6caa41a939f9a6672018b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9000001
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8484048358772962106, guid: 68e1a483f5b6caa41a939f9a6672018b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2419,17 +2411,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3684369154803065693, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.9
-      objectReference: {fileID: 0}
     - target: {fileID: 5819998263597729664, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 5819998263597729664, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.9
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 5819998263597729664, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2468,10 +2456,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9217837847543955907}
     - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
-      propertyPath: moveSpeed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: baguetteUI
       value: 
       objectReference: {fileID: 4385657746522383435}
@@ -2479,10 +2463,6 @@ PrefabInstance:
       propertyPath: buffDisplay
       value: 
       objectReference: {fileID: 8914806928294083596}
-    - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
-      propertyPath: sprintSpeed
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: croissantMeter
       value: 
@@ -2494,10 +2474,6 @@ PrefabInstance:
     - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
       propertyPath: groundCheckRadius
       value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 8465508355333441930, guid: fca594b31dd86fb4db6ec2b0be7159dc, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 320
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2665,7 +2641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5631345710785513886, guid: b842dc906aa84624994cb77b6260eaaa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9000001
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5631345710785513886, guid: b842dc906aa84624994cb77b6260eaaa, type: 3}
       propertyPath: m_LocalPosition.z
