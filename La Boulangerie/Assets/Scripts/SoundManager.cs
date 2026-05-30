@@ -180,6 +180,12 @@ public class SoundManager : MonoBehaviour
             sfxSource.PlayOneShot(fireHurt, sfxVolume);
     }
 
+    public void PlayFireAmbient(float volume)
+    {
+        if (fireLoop != null)
+            sfxSource.PlayOneShot(fireLoop, volume);
+    }
+
     public void PlayPlayerJump()
     {
         if (playerJump != null)

@@ -16,21 +16,32 @@ public class Hazard : MonoBehaviour
     [Header("Damage")]
     public int damageAmount = 1;
     public float damageCooldown = 0.8f;
+
+    [Header("Ambient Sound")]
+    public float ambientRange = 5f;         // how close player needs to be to hear fire
+    public float ambientVolume = 0.4f;      // volume of the ambient fire sound
+    public float ambientInterval = 1.5f;    // how often the ambient sound plays
     #endregion
 
     #region PRIVATE VARIABLES
     private float lastDamageTime = -999f;
+    private float lastAmbientTime = -999f;
     private bool playerInside = false;
     private GameObject playerObject;
+    private Transform playerTransform;
     #endregion
 
     #region START
     void Start()
     {
-        // make sure this object has a trigger collider
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
             col.isTrigger = true;
+
+        // find player transform for distance check
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            playerTransform = player.transform;
     }
     #endregion
 
@@ -45,6 +56,27 @@ public class Hazard : MonoBehaviour
                 DamagePlayer(playerObject);
             }
         }
+
+        // play ambient fire sound when player is nearby
+        if (hazardType == HazardType.Fire && playerTransform != null)
+        {
+            float distance = Vector2.Distance(
+                transform.position,
+                playerTransform.position
+            );
+
+            // volume fades based on distance
+            float volume = Mathf.Lerp(ambientVolume, 0f, distance / ambientRange);
+
+            if (distance <= ambientRange &&
+    Time.time - lastAmbientTime >= ambientInterval)
+            {
+                lastAmbientTime = Time.time;
+
+                if (SoundManager.Instance != null && volume > 0.05f)
+                    SoundManager.Instance.PlayFireAmbient(volume);
+            }
+        }
     }
     #endregion
 
@@ -56,7 +88,6 @@ public class Hazard : MonoBehaviour
         playerInside = true;
         playerObject = other.gameObject;
 
-        // both fire and spike damage immediately on contact
         DamagePlayer(other.gameObject);
     }
 
