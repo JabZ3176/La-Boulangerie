@@ -24,6 +24,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip fireHurt;          // drag Fire_hurt.mp3
     public AudioClip playerJump;        // drag Player_jump.mp3
     public AudioClip spikeHit;          // drag Spike_hit.mp3
+    public AudioClip playerHurt;    // drag your player hurt clip here
     #endregion
 
     #region MUSIC
@@ -197,17 +198,35 @@ public class SoundManager : MonoBehaviour
         if (spikeHit != null)
             sfxSource.PlayOneShot(spikeHit, sfxVolume);
     }
+
+    public void PlayPlayerHurt()
+    {
+        if (playerHurt != null)
+            sfxSource.PlayOneShot(playerHurt, sfxVolume);
+    }
     #endregion
 
     #region VOLUME CONTROL
-    public void SetMusicVolume(float volume)
+    public void SetMasterVolume(float volume)
     {
-        musicVolume = volume;
+        // master controls both music and sfx proportionally
+        musicVolume = volume * 0.08f;
+        sfxVolume = volume;
+
+        if (musicSource != null)
+            musicSource.volume = musicVolume;
+        if (sfxSource != null)
+            sfxSource.volume = sfxVolume;
+    }
+
+    public void SetMusicVolumeOnly(float volume)
+    {
+        musicVolume = volume * 0.08f;
         if (musicSource != null)
             musicSource.volume = musicVolume;
     }
 
-    public void SetSFXVolume(float volume)
+    public void SetSFXVolumeOnly(float volume)
     {
         sfxVolume = volume;
         if (sfxSource != null)

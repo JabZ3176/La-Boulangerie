@@ -600,7 +600,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
+    public void TakeDamage(bool fromEnemy = false)
     {
         if (isDead || isInvincible) return;
 
@@ -609,6 +609,10 @@ public class Player : MonoBehaviour
         ResetStompChain();
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+        // only play hurt sound when hit by enemy
+        if (fromEnemy && SoundManager.Instance != null)
+            SoundManager.Instance.PlayPlayerHurt();
 
         StartCoroutine(BlinkRed());
 

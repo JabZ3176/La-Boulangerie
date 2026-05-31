@@ -155,13 +155,12 @@ public class Enemy : MonoBehaviour
 
         lastDamageTime = Time.time;
 
-        // play enemy attack sound
         if (SoundManager.Instance != null)
             SoundManager.Instance.PlayEnemyDamage();
 
         Player player = playerObject.GetComponent<Player>();
         if (player != null)
-            player.TakeDamage();
+            player.TakeDamage(true);    // true = fromEnemy
     }
     #endregion
 

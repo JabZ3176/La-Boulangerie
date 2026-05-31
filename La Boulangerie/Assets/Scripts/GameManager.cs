@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region ITEM COLLECTION
-
     public void CollectItem(string itemType)
     {
         if (itemType == "Flour")
@@ -126,11 +125,25 @@ public class GameManager : MonoBehaviour
         else if (itemType == "Butter")
             collectedButter++;
 
-        SaveIngredientTotals();
+        SaveIngredientTotals(itemType);
         UpdateIngredientUI();
         CheckDoorUnlock();
     }
+    #endregion
 
+    #region SAVE DATA
+    private void SaveIngredientTotals(string itemType)
+    {
+        // save running totals for shop
+        if (itemType == "Flour")
+            PlayerPrefs.SetInt("TotalFlour", PlayerPrefs.GetInt("TotalFlour", 0) + 1);
+        else if (itemType == "Milk")
+            PlayerPrefs.SetInt("TotalMilk", PlayerPrefs.GetInt("TotalMilk", 0) + 1);
+        else if (itemType == "Butter")
+            PlayerPrefs.SetInt("TotalButter", PlayerPrefs.GetInt("TotalButter", 0) + 1);
+
+        PlayerPrefs.Save();
+    }
     #endregion
 
     #region UI UPDATES

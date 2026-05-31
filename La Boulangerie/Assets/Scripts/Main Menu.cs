@@ -36,6 +36,32 @@ public class MainMenu : MonoBehaviour
     {
         PlayerPrefs.DeleteKey("CurrentLevel");
         PlayerPrefs.DeleteKey("LevelReached");
+        PlayerPrefs.DeleteKey("TotalFlour");
+        PlayerPrefs.DeleteKey("TotalMilk");
+        PlayerPrefs.DeleteKey("TotalButter");
+
+        // clear all collected item flags
+        // add every itemID here that exists in your game
+        string[] itemIDs = new string[]
+        {
+        "Level1_Flour_1", "Level1_Flour_2",
+        "Level1_Milk_1",  "Level1_Milk_2",
+        "Level1_Butter_1","Level1_Butter_2",
+        "Level2_Flour_1", "Level2_Flour_2", "Level2_Flour_3",
+        "Level2_Milk_1",  "Level2_Milk_2",  "Level2_Milk_3",
+        "Level2_Butter_1","Level2_Butter_2","Level2_Butter_3",
+        "Level3_Flour_1", "Level3_Flour_2", "Level3_Flour_3",
+        "Level3_Flour_4", "Level3_Flour_5",
+        "Level3_Milk_1",  "Level3_Milk_2",  "Level3_Milk_3",
+        "Level3_Milk_4",  "Level3_Milk_5",
+        "Level3_Butter_1","Level3_Butter_2","Level3_Butter_3",
+        "Level3_Butter_4","Level3_Butter_5",
+        };
+
+        foreach (string id in itemIDs)
+            PlayerPrefs.DeleteKey("Collected_" + id);
+
+        PlayerPrefs.SetInt("HasPlayedBefore", 1);
         PlayerPrefs.Save();
 
         Time.timeScale = 1f;
@@ -46,7 +72,6 @@ public class MainMenu : MonoBehaviour
         {
             PlayerPrefs.SetInt("HasPlayedBefore", 1);
             PlayerPrefs.Save();
-
             SceneManager.LoadScene("Tutorial");
         }
         else
@@ -69,6 +94,11 @@ public class MainMenu : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Tutorial");
+    }
+
+    public void OpenIngredientTracker()
+    {
+        SceneManager.LoadScene("IngredientTracker");
     }
     #endregion
 
