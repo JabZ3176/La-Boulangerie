@@ -23,6 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelScene.unity
     guid: f794ab454893188418c394b5d9f110be
+  - enabled: 1
+    path: Assets/Scenes/IngredientTracker.unity
+    guid: cd6c156a12ba5e0498e514b786eac90a
+  - enabled: 1
+    path: Assets/Scenes/Shop.unity
+    guid: 879bf313c9fab764a96738b2a0f07597
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

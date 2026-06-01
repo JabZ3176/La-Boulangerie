@@ -19,7 +19,7 @@ public class Item : MonoBehaviour
     void Start()
     {
         // check if this item has already been collected in a previous run
-        if (PlayerPrefs.GetInt("Collected_" + itemID, 0) == 1)
+        if (IsAlreadyCollected())
         {
             // already collected — hide it permanently
             gameObject.SetActive(false);
@@ -30,17 +30,31 @@ public class Item : MonoBehaviour
     #region TRIGGER
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            PlayPickupSound();
+        if (!other.CompareTag("Player")) return;
+        if (IsAlreadyCollected()) return;
 
-            // mark this item as permanently collected
+        PlayPickupSound();
+
+        // mark this item as permanently collected before telling the GameManager.
+        // This makes the saved item state and the UI/door progress agree if the level reloads.
+        if (!string.IsNullOrEmpty(itemID))
+        {
             PlayerPrefs.SetInt("Collected_" + itemID, 1);
             PlayerPrefs.Save();
-
-            GameManager.Instance.CollectItem(itemType);
-            Destroy(gameObject);
         }
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.CollectItem(itemType);
+
+        Destroy(gameObject);
+    }
+    #endregion
+
+    #region SAVE CHECK
+    private bool IsAlreadyCollected()
+    {
+        if (string.IsNullOrEmpty(itemID)) return false;
+        return PlayerPrefs.GetInt("Collected_" + itemID, 0) == 1;
     }
     #endregion
 
@@ -48,7 +62,12 @@ public class Item : MonoBehaviour
     private void PlayPickupSound()
     {
         if (pickupSound != null)
-            AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
+        {
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlaySFX(pickupSound, volume);
+            else
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
+        }
     }
     #endregion
 }

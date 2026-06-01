@@ -8,6 +8,11 @@ public class Door : MonoBehaviour
     public int nextLevelValue;
     #endregion
 
+    #region REFERENCES
+    [Header("References")]
+    public DoorChoicePanel choicePanel;
+    #endregion
+
     #region PRIVATE VARIABLES
     private bool isUnlocked = false;
     #endregion
@@ -19,24 +24,30 @@ public class Door : MonoBehaviour
 
         int currentBest = PlayerPrefs.GetInt("LevelReached", 1);
         if (nextLevelValue > currentBest)
-        {
             PlayerPrefs.SetInt("LevelReached", nextLevelValue);
-        }
 
-        PlayerPrefs.SetString("CurrentLevel", nextSceneName);
+        string currentScene = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetInt("ShopUnlocked", 1);
+        PlayerPrefs.SetString("LastCompletedLevel", currentScene);
+        PlayerPrefs.SetString("CurrentShopReturnLevel", currentScene);
+        PlayerPrefs.SetString("NextLevelAfterShop", nextSceneName);
+        PlayerPrefs.SetString("CurrentLevel", currentScene);
         PlayerPrefs.Save();
 
-        Debug.Log("Progress saved. Continue will load: " + nextSceneName);
+        if (choicePanel != null)
+            choicePanel.Unlock(nextSceneName);
     }
     #endregion
 
     #region TRIGGER
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && isUnlocked)
-        {
+        if (!other.CompareTag("Player") || !isUnlocked) return;
+
+        if (choicePanel != null)
+            choicePanel.ShowChoicePanel();
+        else
             SceneManager.LoadScene(nextSceneName);
-        }
     }
     #endregion
 }

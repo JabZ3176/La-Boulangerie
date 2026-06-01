@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Door
   nextSceneName: Level2
   nextLevelValue: 2
+  choicePanel: {fileID: 0}

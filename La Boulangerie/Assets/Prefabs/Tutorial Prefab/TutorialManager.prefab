@@ -50,14 +50,15 @@ MonoBehaviour:
   arrow: {fileID: 0}
   nextSceneName: Level1
   arrowPositions:
+  - {x: 0, y: 0}
   - {x: 1248, y: 526}
-  - {x: 315, y: 329}
-  - {x: -572, y: 147}
+  - {x: 358, y: 347}
+  - {x: -460, y: 123}
   - {x: 1248, y: 526}
   - {x: 745, y: -216}
   arrowRotations:
   - 0
-  - 135.141
-  - 135.141
   - 0
+  - 138
+  - 138
   - 180

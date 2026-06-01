@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1275749935034960673
+--- !u!1 &4415751332794101210
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 248211906340653349}
-  - component: {fileID: 6452657204679826457}
+  - component: {fileID: 4490803633292386576}
+  - component: {fileID: 8366339841199656486}
+  - component: {fileID: 7696421194126714788}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -17,40 +18,71 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &248211906340653349
+--- !u!4 &4490803633292386576
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275749935034960673}
+  m_GameObject: {fileID: 4415751332794101210}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1054.5, y: 585.25, z: 0}
+  m_LocalPosition: {x: 928.98645, y: 446.38818, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6452657204679826457
+--- !u!114 &8366339841199656486
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275749935034960673}
+  m_GameObject: {fileID: 4415751332794101210}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee9a354e7259d174aab04f4de9e0d30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  sceneMusic:
+  - sceneName: IngredientTracker
+    musicClip: {fileID: 8300000, guid: a55c593132524dd4b8e269491eadfaac, type: 3}
+  playMusicOnSceneLoad: 1
+  restartSameClip: 0
+  fadeDuration: 1
   buttonClick: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
   buttonHover: {fileID: 0}
+  baguetteThrow: {fileID: 8300000, guid: 4bc411a4547e13e4dbae9e350c1a91ef, type: 3}
+  enemyDamage: {fileID: 8300000, guid: 147b9406a1b188f4face388296493e55, type: 3}
+  enemyHurt: {fileID: 8300000, guid: 46c1103855ad9e3498a6cf865c7cb9cf, type: 3}
+  playerFall: {fileID: 8300000, guid: 7fab635b414c9a340af8759ef3144e31, type: 3}
+  playerFallHit: {fileID: 8300000, guid: 107447759aa8ff54fbc1237f0a912024, type: 3}
+  fireLoop: {fileID: 8300000, guid: de8ae4c118b88f241832a1da466a4b5a, type: 3}
+  fireHurt: {fileID: 8300000, guid: 946c213e70c647b418d546498e33140b, type: 3}
+  playerJump: {fileID: 8300000, guid: 36cef100c6536594592c1368016f00e5, type: 3}
+  spikeHit: {fileID: 8300000, guid: 7971c2b8696b79c40a4d08ac1fd7e6b7, type: 3}
+  playerHurt: {fileID: 8300000, guid: 2c1cb781a642e624ca7c2e0dc0b9e831, type: 3}
   mainMenuMusic: {fileID: 8300000, guid: a55c593132524dd4b8e269491eadfaac, type: 3}
   level1Music: {fileID: 8300000, guid: 012caf4933f8cc948831a1b596dcc291, type: 3}
   level2Music: {fileID: 8300000, guid: 012caf4933f8cc948831a1b596dcc291, type: 3}
   level3Music: {fileID: 8300000, guid: 012caf4933f8cc948831a1b596dcc291, type: 3}
   tutorialMusic: {fileID: 8300000, guid: 012caf4933f8cc948831a1b596dcc291, type: 3}
+  levelSceneMusic: {fileID: 8300000, guid: a55c593132524dd4b8e269491eadfaac, type: 3}
+  masterVolume: 0.5
   musicVolume: 1
   sfxVolume: 1
-  fadeDuration: 1
+  musicOutputMultiplier: 0.25
+  sfxOutputMultiplier: 1
+--- !u!114 &7696421194126714788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4415751332794101210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab068755547d064cb7242ea95a85340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound

@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 3329977582327958622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -3.17, y: -0.92, z: 0}
+  m_LocalScale: {x: 1.2183927, y: 1.2183927, z: 1.2183927}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2652324042925031162}
@@ -81,12 +81,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -100
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 9e7b3012cf8bd8143af2491dc13fc7b9, type: 3}
-  m_Color: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 62e57f83a70437e428c139b38d944610, type: 3}
+  m_Color: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 19.2, y: 10.8}
+  m_Size: {x: 16.72, y: 9.41}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -118,8 +118,8 @@ Transform:
   m_GameObject: {fileID: 8523058719732613515}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.66, y: 1.97, z: -4.4815}
-  m_LocalScale: {x: 1.8963348, y: 1.7, z: 1.8963348}
+  m_LocalPosition: {x: -17.981, y: 0.78294, z: 0}
+  m_LocalScale: {x: 1.9968405, y: 1.7901, z: 1.9968405}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4218614821645567443}
@@ -137,8 +137,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8de83df948bb3344ab6cde2a7ceaa05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundFollowCamera
-  cameraTransform: {fileID: 0}
-  zPosition: 10
+  referenceMode: 0
+  customTarget: {fileID: 0}
+  followX: 1
+  followY: 1
+  followMultiplier: {x: 1, y: 1}
+  keepOriginalZ: 1
+  captureOnFirstLateUpdate: 1
+  snapToPixelGrid: 0
+  pixelsPerUnit: 16
 --- !u!212 &4245493441502170499
 SpriteRenderer:
   serializedVersion: 2
@@ -184,8 +191,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1113108231
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}

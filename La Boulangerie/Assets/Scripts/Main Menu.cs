@@ -39,6 +39,16 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.DeleteKey("TotalFlour");
         PlayerPrefs.DeleteKey("TotalMilk");
         PlayerPrefs.DeleteKey("TotalButter");
+        PlayerPrefs.DeleteKey("ShopUnlocked");
+        PlayerPrefs.DeleteKey("NextLevelAfterShop");
+        PlayerPrefs.DeleteKey("CurrentShopReturnLevel");
+
+        PlayerPrefs.DeleteKey("Upgrade_Health");
+        PlayerPrefs.DeleteKey("Upgrade_Baguette");
+        PlayerPrefs.DeleteKey("Upgrade_Stamina");
+        PlayerPrefs.DeleteKey("Upgrade_Movement");
+        PlayerPrefs.DeleteKey("Upgrade_Jump");
+        PlayerPrefs.DeleteKey("Upgrade_BaguetteDamage");
 
         // clear all collected item flags
         // add every itemID here that exists in your game
@@ -60,6 +70,9 @@ public class MainMenu : MonoBehaviour
 
         foreach (string id in itemIDs)
             PlayerPrefs.DeleteKey("Collected_" + id);
+
+        if (PlayerUpgrades.Instance != null)
+            PlayerUpgrades.Instance.ResetUpgrades();
 
         PlayerPrefs.SetInt("HasPlayedBefore", 1);
         PlayerPrefs.Save();

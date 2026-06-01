@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     #region STATS
     [Header("Stats")]
     public int health = 3;
+    public int maxHealth = 3;       // add this
     private bool isDead = false;
     private bool isInvincible = false;
     #endregion
@@ -89,6 +90,7 @@ public class Player : MonoBehaviour
     #region REFERENCES
     [Header("References")]
     public DeathMenu deathMenu;
+    public PlayerDamageParticles damageParticles;
     #endregion
 
     #region PRIVATE VARIABLES
@@ -112,6 +114,11 @@ public class Player : MonoBehaviour
     private float originalSprintSpeed;
     private float originalJumpForce;
 
+    private float baseMoveSpeed;
+    private float baseSprintSpeed;
+    private float baseJumpForce;
+    private float baseCroissantDrainRate;
+
     private float idleTimer = 0f;
 
     private const int MaxHealth = 3;
@@ -119,6 +126,56 @@ public class Player : MonoBehaviour
     private const string EnemyTag = "Enemy";
     private const string StartScene = "Level1";
     private const string DoubleJumpScene = "Level2";
+    #endregion
+
+    #region UPGRADE APPLICATION
+    public void ApplySavedUpgrades(bool refillHealth)
+    {
+        int healthLevel = GetUpgradeLevel("Upgrade_Health", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.healthLevel : 0, 0, 3);
+        int baguetteLevel = GetUpgradeLevel("Upgrade_Baguette", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.baguetteLevel : 0, 0, 3);
+        int staminaLevel = GetUpgradeLevel("Upgrade_Stamina", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.staminaLevel : 0, 0, 2);
+        int movementLevel = GetUpgradeLevel("Upgrade_Movement", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.movementLevel : 0, 0, 2);
+        int jumpLevel = GetUpgradeLevel("Upgrade_Jump", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.jumpLevel : 0, 0, 2);
+
+        maxHealth = Mathf.Clamp(3 + healthLevel, 3, 6);
+
+        if (refillHealth)
+            health = maxHealth;
+        else
+            health = Mathf.Clamp(health, 0, maxHealth);
+
+        maxBaguettes = Mathf.Clamp(3 + baguetteLevel, 3, 6);
+
+        croissantDrainRate = Mathf.Max(5f, baseCroissantDrainRate - (staminaLevel * 5f));
+        moveSpeed = baseMoveSpeed + (movementLevel * 1.5f);
+        sprintSpeed = baseSprintSpeed + (movementLevel * 2f);
+        jumpForce = baseJumpForce + (jumpLevel * 2f);
+    }
+
+    private int GetUpgradeLevel(string prefsKey, int singletonValue, int min, int max)
+    {
+        // Use the highest value from the singleton and PlayerPrefs.
+        // This protects the player if the singleton was not present when the shop saved the upgrade,
+        // or if a stale PlayerUpgrades object exists in the scene.
+        int savedValue = PlayerPrefs.GetInt(prefsKey, 0);
+        int value = PlayerUpgrades.Instance != null ? Mathf.Max(singletonValue, savedValue) : savedValue;
+        return Mathf.Clamp(value, min, max);
+    }
+
+    private void RefreshBaguetteCapacity()
+    {
+        int baguetteLevel = GetUpgradeLevel("Upgrade_Baguette", PlayerUpgrades.Instance != null ? PlayerUpgrades.Instance.baguetteLevel : 0, 0, 3);
+        maxBaguettes = Mathf.Clamp(3 + baguetteLevel, 3, 6);
+        currentBaguettes = Mathf.Clamp(currentBaguettes, 0, maxBaguettes);
+    }
+
+    private void UpdateBaguetteUI()
+    {
+        RefreshBaguetteCapacity();
+
+        if (baguetteUI != null)
+            baguetteUI.UpdateSlots(currentBaguettes, maxBaguettes);
+    }
     #endregion
 
     #region START
@@ -129,9 +186,18 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
 
         originalColor = spriteRenderer.color;
-
         currentCroissantEnergy = maxCroissantEnergy;
 
+        // Save the inspector values as the true base stats before upgrades are applied.
+        baseMoveSpeed = moveSpeed;
+        baseSprintSpeed = sprintSpeed;
+        baseJumpForce = jumpForce;
+        baseCroissantDrainRate = croissantDrainRate;
+
+        // Apply saved upgrades even if the PlayerUpgrades singleton is missing in this scene.
+        ApplySavedUpgrades(true);
+
+        // The stomp buff should return to the upgraded stats, not the old base stats.
         originalMoveSpeed = moveSpeed;
         originalSprintSpeed = sprintSpeed;
         originalJumpForce = jumpForce;
@@ -144,7 +210,9 @@ public class Player : MonoBehaviour
         else if (currentScene == "Level3") killHeight = -30f;
 
         if (heartHealthBar != null)
-            heartHealthBar.UpdateHearts(health);
+            heartHealthBar.UpdateHearts(health, maxHealth);
+
+        UpdateBaguetteUI();
 
         if (croissantMeter != null)
             croissantMeter.UpdateCroissants(currentCroissantEnergy, maxCroissantEnergy);
@@ -258,7 +326,11 @@ public class Player : MonoBehaviour
         if (footstepSounds.Length == 0) return;
 
         int index = Random.Range(0, footstepSounds.Length);
-        AudioSource.PlayClipAtPoint(footstepSounds[index], transform.position, footstepVolume);
+
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlaySFX(footstepSounds[index], footstepVolume);
+        else
+            AudioSource.PlayClipAtPoint(footstepSounds[index], transform.position, footstepVolume);
     }
     #endregion
 
@@ -337,6 +409,11 @@ public class Player : MonoBehaviour
         StartCoroutine(PerformSlam());
     }
 
+    private bool IsStompInputHeld()
+    {
+        return Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+    }
+
     private IEnumerator PerformSlam()
     {
         isSlamming = true;
@@ -391,8 +468,7 @@ public class Player : MonoBehaviour
         lastThrowTime = Time.time;
         currentBaguettes--;
 
-        if (baguetteUI != null)
-            baguetteUI.UpdateSlots(currentBaguettes);
+        UpdateBaguetteUI();
 
         if (SoundManager.Instance != null)
             SoundManager.Instance.PlayBaguetteThrow();
@@ -416,12 +492,12 @@ public class Player : MonoBehaviour
 
     public bool AddBaguette()
     {
+        RefreshBaguetteCapacity();
+
         if (currentBaguettes >= maxBaguettes) return false;
 
         currentBaguettes++;
-
-        if (baguetteUI != null)
-            baguetteUI.UpdateSlots(currentBaguettes);
+        UpdateBaguetteUI();
 
         return true;
     }
@@ -535,7 +611,7 @@ public class Player : MonoBehaviour
     private void UpdateHealthUI()
     {
         if (heartHealthBar != null)
-            heartHealthBar.UpdateHearts(health);
+            heartHealthBar.UpdateHearts(health, maxHealth);
     }
 
     private void UpdateCroissantUI()
@@ -548,6 +624,21 @@ public class Player : MonoBehaviour
     #region DAMAGE AND DEATH
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Enemy2D uses a solid collider, so stomps can arrive as normal collisions.
+        // A stomp only counts while S or Down Arrow is being held.
+        if (isSlamming && IsStompInputHeld() && TryStompEnemy(collision.collider))
+            return;
+
+        // If the player hits or lands on a solid enemy without holding stomp input,
+        // end the slam as a normal collision instead of damaging/stomping the enemy.
+        if (isSlamming && IsEnemyCollider(collision.collider))
+        {
+            slamLanded = true;
+            fallTimer = 0f;
+            isFalling = false;
+            return;
+        }
+
         // normal damage tag
         if (collision.gameObject.CompareTag(DamageTag))
             TakeDamage();
@@ -582,22 +673,59 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // slam landed on an enemy trigger
-        if (isSlamming && other.CompareTag("Enemy") && other.isTrigger)
+        // Kept for older trigger-based enemies and for projects that add a trigger stomp zone.
+        if (isSlamming && IsStompInputHeld())
+            TryStompEnemy(other);
+    }
+
+    private bool IsEnemyCollider(Collider2D enemyCollider)
+    {
+        if (enemyCollider == null) return false;
+        if (enemyCollider.GetComponentInParent<Enemy2D>() != null) return true;
+
+        return enemyCollider.CompareTag(EnemyTag) ||
+               enemyCollider.transform.root.CompareTag(EnemyTag);
+    }
+
+    private bool TryStompEnemy(Collider2D enemyCollider)
+    {
+        if (enemyCollider == null) return false;
+        if (!IsStompInputHeld()) return false;
+
+        Enemy2D enemy2D = enemyCollider.GetComponentInParent<Enemy2D>();
+        if (enemy2D != null)
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
+            bool stomped = enemy2D.TryStomp(this, rb, slamBounceForce);
+            if (stomped)
             {
-                enemy.TakeDamage(1);
-                enemy.Stun();
-                RegisterStomp();
-
-                // bounce up after hitting enemy
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
+                slamLanded = true;
+                fallTimer = 0f;
+                isFalling = false;
             }
-
-            slamLanded = true;
+            return stomped;
         }
+
+        // Fallback for your old trigger-based Enemy script without directly depending on its class name.
+        bool isOldEnemy = enemyCollider.isTrigger &&
+                          (enemyCollider.CompareTag(EnemyTag) || enemyCollider.transform.root.CompareTag(EnemyTag));
+
+        if (!isOldEnemy) return false;
+
+        GameObject receiver = enemyCollider.attachedRigidbody != null
+            ? enemyCollider.attachedRigidbody.gameObject
+            : enemyCollider.transform.root.gameObject;
+
+        receiver.SendMessage("TakeDamage", 1, SendMessageOptions.DontRequireReceiver);
+        receiver.SendMessage("Stun", SendMessageOptions.DontRequireReceiver);
+
+        RegisterStomp();
+
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, slamBounceForce);
+        slamLanded = true;
+        fallTimer = 0f;
+        isFalling = false;
+
+        return true;
     }
 
     public void TakeDamage(bool fromEnemy = false)
@@ -605,6 +733,10 @@ public class Player : MonoBehaviour
         if (isDead || isInvincible) return;
 
         health -= 1;
+
+        // Emit red damage particles
+        if (damageParticles != null)
+            damageParticles.EmitDamageParticles();
 
         ResetStompChain();
 

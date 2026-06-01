@@ -73,7 +73,19 @@ public class GameManager : MonoBehaviour
             unlockPanel.SetActive(false);
 
         SetLevelRequirements();
+
+        // IMPORTANT:
+        // Ingredients themselves are permanently hidden using PlayerPrefs in Item.cs.
+        // When the level reloads, the GameManager used to reset collectedFlour/Milk/Butter to 0,
+        // which made the UI and door requirements reset even though the items were gone.
+        // This rebuilds the current level's collected counts from the saved item IDs.
+        LoadCollectedIngredientsForCurrentLevel();
+
         UpdateIngredientUI();
+
+        // Restore the door if the player had already collected enough ingredients in this level.
+        // false means do not show the unlock popup again when returning to a completed level.
+        CheckDoorUnlock(false);
     }
 
     #endregion
@@ -115,8 +127,32 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region ITEM COLLECTION
-    public void CollectItem(string itemType)
+    #region LOAD LEVEL PROGRESS
+
+    private void LoadCollectedIngredientsForCurrentLevel()
+    {
+        collectedFlour = 0;
+        collectedMilk = 0;
+        collectedButter = 0;
+
+        Item[] items = Object.FindObjectsByType<Item>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        );
+
+        foreach (Item item in items)
+        {
+            if (item == null) continue;
+            if (string.IsNullOrEmpty(item.itemID)) continue;
+
+            bool alreadyCollected = PlayerPrefs.GetInt("Collected_" + item.itemID, 0) == 1;
+            if (!alreadyCollected) continue;
+
+            AddCollectedCountOnly(item.itemType);
+        }
+    }
+
+    private void AddCollectedCountOnly(string itemType)
     {
         if (itemType == "Flour")
             collectedFlour++;
@@ -124,14 +160,25 @@ public class GameManager : MonoBehaviour
             collectedMilk++;
         else if (itemType == "Butter")
             collectedButter++;
+    }
+
+    #endregion
+
+    #region ITEM COLLECTION
+
+    public void CollectItem(string itemType)
+    {
+        AddCollectedCountOnly(itemType);
 
         SaveIngredientTotals(itemType);
         UpdateIngredientUI();
-        CheckDoorUnlock();
+        CheckDoorUnlock(true);
     }
+
     #endregion
 
     #region SAVE DATA
+
     private void SaveIngredientTotals(string itemType)
     {
         // save running totals for shop
@@ -144,6 +191,7 @@ public class GameManager : MonoBehaviour
 
         PlayerPrefs.Save();
     }
+
     #endregion
 
     #region UI UPDATES
@@ -173,7 +221,7 @@ public class GameManager : MonoBehaviour
 
     #region DOOR UNLOCK
 
-    private void CheckDoorUnlock()
+    private void CheckDoorUnlock(bool showUnlockScreen)
     {
         if (doorUnlocked) return;
 
@@ -184,8 +232,12 @@ public class GameManager : MonoBehaviour
         if (flourMet && milkMet && butterMet)
         {
             doorUnlocked = true;
-            door.Unlock();
-            ShowUnlockScreen();
+
+            if (door != null)
+                door.Unlock();
+
+            if (showUnlockScreen)
+                ShowUnlockScreen();
         }
     }
 
@@ -206,21 +258,6 @@ public class GameManager : MonoBehaviour
 
         if (unlockPanel != null)
             unlockPanel.SetActive(false);
-    }
-
-    #endregion
-
-    #region SAVE DATA
-
-    private void SaveIngredientTotals()
-    {
-        PlayerPrefs.SetInt("ShopFlour",
-            PlayerPrefs.GetInt("ShopFlour", 0) + 1);
-        PlayerPrefs.SetInt("ShopMilk",
-            PlayerPrefs.GetInt("ShopMilk", 0) + 1);
-        PlayerPrefs.SetInt("ShopButter",
-            PlayerPrefs.GetInt("ShopButter", 0) + 1);
-        PlayerPrefs.Save();
     }
 
     #endregion

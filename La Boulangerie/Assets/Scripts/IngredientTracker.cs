@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 
@@ -15,12 +16,21 @@ public class IngredientTracker : MonoBehaviour
     public Image flourIcon;
     public Image milkIcon;
     public Image butterIcon;
+
+    [Header("Navigation Panels")]
+    [Tooltip("The ingredient tracker panel/container. If left empty, this GameObject will be used.")]
+    public GameObject ingredientTrackerPanel;
+
+    [Tooltip("The main pause menu panel/container that should reopen when pressing Back To Pause Menu.")]
+    public GameObject pauseMenuPanel;
+
+    [Header("Scene Navigation")]
+    public string mainMenuSceneName = "MainMenu";
     #endregion
 
     #region ON ENABLE
     void OnEnable()
     {
-        // refresh every time the panel is opened
         UpdateDisplay();
     }
     #endregion
@@ -44,6 +54,32 @@ public class IngredientTracker : MonoBehaviour
 
         if (totalText != null)
             totalText.text = "Total:     " + total;
+    }
+    #endregion
+
+    #region BUTTONS
+    public void BackToPauseMenu()
+    {
+        GameObject trackerPanel = ingredientTrackerPanel != null
+            ? ingredientTrackerPanel
+            : gameObject;
+
+        trackerPanel.SetActive(false);
+
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(true);
+
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void BackToMainMenu()
+    {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene(mainMenuSceneName);
     }
     #endregion
 }

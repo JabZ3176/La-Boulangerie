@@ -1,34 +1,43 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class LevelButton : MonoBehaviour
 {
     #region SETTINGS
     public int level;
+    [Range(0f, 1f)] public float lockedAlpha = 0.3f;
     #endregion
 
     #region START
     void Start()
     {
+        RefreshButtonState();
+    }
+    #endregion
+
+    #region REFRESH
+    public void RefreshButtonState()
+    {
         Button btn = GetComponent<Button>();
+        if (btn == null) return;
 
         int levelReached = PlayerPrefs.GetInt("LevelReached", 1);
+        bool unlocked = level <= levelReached;
 
-        if (level > levelReached)
-        {
-            btn.interactable = false;
+        btn.interactable = unlocked;
 
-            TextMeshProUGUI label = GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null)
-            {
-                label.color = new Color(1f, 1f, 1f, 0.3f);
-            }
-        }
-        else
+        TextMeshProUGUI label = GetComponentInChildren<TextMeshProUGUI>(true);
+        if (label != null)
         {
-            btn.interactable = true;
+            Color color = label.color;
+            color.a = unlocked ? 1f : lockedAlpha;
+            label.color = color;
         }
+
+        MenuButtonVisuals visuals = GetComponent<MenuButtonVisuals>();
+        if (visuals != null)
+            visuals.Refresh();
     }
     #endregion
 }

@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Milk
+  itemID: Level1_Milk_1
   pickupSound: {fileID: 8300000, guid: a0f45d0b7b1fd13418e9498535d47c2f, type: 3}
   volume: 1
 --- !u!114 &5732577824429076684
@@ -484,6 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Milk
+  itemID: Level1_Milk_2
   pickupSound: {fileID: 8300000, guid: a0f45d0b7b1fd13418e9498535d47c2f, type: 3}
   volume: 1
 --- !u!114 &4700951217914846355
@@ -841,6 +843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Flour
+  itemID: Level1_Flour_2
   pickupSound: {fileID: 8300000, guid: a0f45d0b7b1fd13418e9498535d47c2f, type: 3}
   volume: 1
 --- !u!114 &2010230137008479509
@@ -1540,6 +1543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Butter
+  itemID: Level1_Butter_2
   pickupSound: {fileID: 8300000, guid: a0f45d0b7b1fd13418e9498535d47c2f, type: 3}
   volume: 1
 --- !u!114 &764813694560652121
@@ -1747,6 +1751,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Butter
+  itemID: Level1_Butter_1
   pickupSound: {fileID: 8300000, guid: 8afcb12f5461679408526f8d5108e05a, type: 3}
   volume: 1
 --- !u!114 &8993559488148175793
@@ -2013,6 +2018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemType: Flour
+  itemID: Level1_Flour_1
   pickupSound: {fileID: 8300000, guid: a0f45d0b7b1fd13418e9498535d47c2f, type: 3}
   volume: 1
 --- !u!114 &1780005469108425527
@@ -2059,8 +2065,8 @@ Transform:
   m_GameObject: {fileID: 6730590549576209556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.723, y: -9.389, z: 0}
-  m_LocalScale: {x: 0.5377397, y: 0.5377397, z: 0.5377397}
+  m_LocalPosition: {x: 27.07, y: -8.8722, z: 0}
+  m_LocalScale: {x: 0.60904396, y: 0.60904396, z: 0.60904396}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5297880374646483421}

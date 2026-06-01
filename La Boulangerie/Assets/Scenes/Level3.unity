@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Including boss fights and a shop that is accessible after each level
+  m_text: Including boss fights!!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1452dd7159e80f14caa9a1b8b5cb14aa, type: 2}
   m_sharedMaterial: {fileID: 1444944798937487695, guid: 1452dd7159e80f14caa9a1b8b5cb14aa, type: 2}
@@ -1392,7 +1392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Many More levels coming for the final game!!
+  m_text: Many More levels...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1452dd7159e80f14caa9a1b8b5cb14aa, type: 2}
   m_sharedMaterial: {fileID: 1444944798937487695, guid: 1452dd7159e80f14caa9a1b8b5cb14aa, type: 2}
@@ -1533,6 +1533,10 @@ MonoBehaviour:
   leftArrow: {fileID: 1298019334}
   rightArrow: {fileID: 823456485}
   buttonText: {fileID: 837318468}
+  button: {fileID: 0}
+  selectedArrowColor: {r: 0.37254903, g: 0.43137258, b: 0.54509807, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1001 &2075303624
 PrefabInstance:
   m_ObjectHideFlags: 0

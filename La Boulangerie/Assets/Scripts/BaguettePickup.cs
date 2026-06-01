@@ -63,7 +63,10 @@ public class BaguettePickup : MonoBehaviour
     {
         if (pickupSound != null)
         {
-            AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlaySFX(pickupSound, volume);
+            else
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position, volume);
         }
     }
     #endregion

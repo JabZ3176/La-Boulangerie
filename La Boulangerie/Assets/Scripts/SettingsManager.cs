@@ -23,71 +23,116 @@ public class SettingsManager : MonoBehaviour
     public GameObject settingsContainer;
     #endregion
 
-    #region START
-    void Start()
-    {
-        // load saved values or use defaults
-        float savedMaster = PlayerPrefs.GetFloat("MasterVolume", 50f);
-        float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 50f);
-        float savedSFX = PlayerPrefs.GetFloat("SFXVolume", 50f);
-        float savedBrightness = PlayerPrefs.GetFloat("Brightness", 50f);
+    #region PLAYER PREF KEYS
+    private const string BrightnessKey = "Brightness";
+    #endregion
 
-        // set slider values without triggering callbacks yet
+    #region UNITY
+    private void Start()
+    {
+        SetupSlider(masterSlider, 0f, 100f);
+        SetupSlider(musicSlider, 0f, 100f);
+        SetupSlider(sfxSlider, 0f, 100f);
+        SetupSlider(brightnessSlider, 0f, 100f);
+
+        float savedMaster = PlayerPrefs.GetFloat(SoundManager.MasterVolumeKey, 50f);
+        float savedMusic = PlayerPrefs.GetFloat(SoundManager.MusicVolumeKey, 50f);
+        float savedSFX = PlayerPrefs.GetFloat(SoundManager.SFXVolumeKey, 50f);
+        float savedBrightness = PlayerPrefs.GetFloat(BrightnessKey, 50f);
+
+        // Backwards compatibility with your old single Audio key.
+        if (!PlayerPrefs.HasKey(SoundManager.MasterVolumeKey) && PlayerPrefs.HasKey("Audio"))
+        {
+            float oldAudio = Mathf.Clamp(PlayerPrefs.GetFloat("Audio", 50f), 0f, 100f);
+            savedMaster = oldAudio;
+            savedMusic = oldAudio;
+            savedSFX = oldAudio;
+        }
+
         if (masterSlider != null) masterSlider.SetValueWithoutNotify(savedMaster);
         if (musicSlider != null) musicSlider.SetValueWithoutNotify(savedMusic);
         if (sfxSlider != null) sfxSlider.SetValueWithoutNotify(savedSFX);
         if (brightnessSlider != null) brightnessSlider.SetValueWithoutNotify(savedBrightness);
 
-        // apply saved values immediately
         ApplyMaster(savedMaster);
         ApplyMusic(savedMusic);
         ApplySFX(savedSFX);
         ApplyBrightness(savedBrightness);
 
-        // hook up listeners
-        if (masterSlider != null) masterSlider.onValueChanged.AddListener(ApplyMaster);
-        if (musicSlider != null) musicSlider.onValueChanged.AddListener(ApplyMusic);
-        if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(ApplySFX);
-        if (brightnessSlider != null) brightnessSlider.onValueChanged.AddListener(ApplyBrightness);
+        if (masterSlider != null)
+        {
+            masterSlider.onValueChanged.RemoveListener(ApplyMaster);
+            masterSlider.onValueChanged.AddListener(ApplyMaster);
+        }
+
+        if (musicSlider != null)
+        {
+            musicSlider.onValueChanged.RemoveListener(ApplyMusic);
+            musicSlider.onValueChanged.AddListener(ApplyMusic);
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.onValueChanged.RemoveListener(ApplySFX);
+            sfxSlider.onValueChanged.AddListener(ApplySFX);
+        }
+
+        if (brightnessSlider != null)
+        {
+            brightnessSlider.onValueChanged.RemoveListener(ApplyBrightness);
+            brightnessSlider.onValueChanged.AddListener(ApplyBrightness);
+        }
     }
     #endregion
 
-    #region MASTER VOLUME
+    #region SETUP
+    private void SetupSlider(Slider slider, float min, float max)
+    {
+        if (slider == null) return;
+
+        slider.minValue = min;
+        slider.maxValue = max;
+        slider.wholeNumbers = false;
+    }
+    #endregion
+
+    #region AUDIO
     public void ApplyMaster(float value)
     {
+        value = Mathf.Clamp(value, 0f, 100f);
+        PlayerPrefs.SetFloat(SoundManager.MasterVolumeKey, value);
+        PlayerPrefs.Save();
+
         if (SoundManager.Instance != null)
             SoundManager.Instance.SetMasterVolume(value / 100f);
-
-        PlayerPrefs.SetFloat("MasterVolume", value);
-        PlayerPrefs.Save();
     }
-    #endregion
 
-    #region MUSIC VOLUME
     public void ApplyMusic(float value)
     {
+        value = Mathf.Clamp(value, 0f, 100f);
+        PlayerPrefs.SetFloat(SoundManager.MusicVolumeKey, value);
+        PlayerPrefs.Save();
+
         if (SoundManager.Instance != null)
             SoundManager.Instance.SetMusicVolumeOnly(value / 100f);
-
-        PlayerPrefs.SetFloat("MusicVolume", value);
-        PlayerPrefs.Save();
     }
-    #endregion
 
-    #region SFX VOLUME
     public void ApplySFX(float value)
     {
+        value = Mathf.Clamp(value, 0f, 100f);
+        PlayerPrefs.SetFloat(SoundManager.SFXVolumeKey, value);
+        PlayerPrefs.Save();
+
         if (SoundManager.Instance != null)
             SoundManager.Instance.SetSFXVolumeOnly(value / 100f);
-
-        PlayerPrefs.SetFloat("SFXVolume", value);
-        PlayerPrefs.Save();
     }
     #endregion
 
     #region BRIGHTNESS
     public void ApplyBrightness(float value)
     {
+        value = Mathf.Clamp(value, 0f, 100f);
+
         if (value < 50f)
         {
             float t = 1f - (value / 50f);
@@ -101,7 +146,7 @@ public class SettingsManager : MonoBehaviour
             if (darkOverlay != null) darkOverlay.alpha = 0f;
         }
 
-        PlayerPrefs.SetFloat("Brightness", value);
+        PlayerPrefs.SetFloat(BrightnessKey, value);
         PlayerPrefs.Save();
     }
     #endregion

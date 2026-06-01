@@ -91,4 +91,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e41b765186c9384d82e2aa353aa32b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialTrigger
-  panelIndex: 1
+  panelIndex: 2
