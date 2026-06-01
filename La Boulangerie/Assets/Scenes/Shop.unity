@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 130578711}
   - component: {fileID: 130578713}
   - component: {fileID: 130578712}
+  - component: {fileID: 130578714}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -304,13 +305,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyBaguetteSlotsUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -324,6 +325,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130578710}
   m_CullTransparentMesh: 1
+--- !u!114 &130578714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130578710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 1679792438}
+  button: {fileID: 130578712}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &133425033
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +355,7 @@ GameObject:
   - component: {fileID: 133425034}
   - component: {fileID: 133425036}
   - component: {fileID: 133425035}
+  - component: {fileID: 133425037}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -406,13 +427,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyMovementUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -426,6 +447,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133425033}
   m_CullTransparentMesh: 1
+--- !u!114 &133425037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133425033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 2127872553}
+  button: {fileID: 133425035}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &173162610
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,8 +796,10 @@ MonoBehaviour:
   leftArrow: {fileID: 1371686378}
   rightArrow: {fileID: 453586850}
   buttonText: {fileID: 1930447531}
-  normalStyle: 0
-  selectedStyle: 2
+  button: {fileID: 0}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!114 &288776956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,7 +900,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 54}
+  m_AnchoredPosition: {x: 0, y: 15}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &311348471
@@ -1481,6 +1523,7 @@ MonoBehaviour:
   requirementText: {fileID: 1076921898}
   buyButton: {fileID: 1047279724}
   buyButtonText: {fileID: 1748097824}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -1822,8 +1865,10 @@ MonoBehaviour:
   leftArrow: {fileID: 1753865385}
   rightArrow: {fileID: 1281544293}
   buttonText: {fileID: 1693089250}
-  normalStyle: 0
-  selectedStyle: 2
+  button: {fileID: 0}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!114 &584714157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1990,6 +2035,7 @@ MonoBehaviour:
   requirementText: {fileID: 1239813777}
   buyButton: {fileID: 1957350367}
   buyButtonText: {fileID: 1780750970}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -3509,6 +3555,7 @@ GameObject:
   - component: {fileID: 1047279723}
   - component: {fileID: 1047279725}
   - component: {fileID: 1047279724}
+  - component: {fileID: 1047279726}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -3580,13 +3627,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyHealthUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3600,6 +3647,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047279722}
   m_CullTransparentMesh: 1
+--- !u!114 &1047279726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047279722}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 1748097824}
+  button: {fileID: 1047279724}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &1066876006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3856,6 +3922,7 @@ GameObject:
   - component: {fileID: 1110324807}
   - component: {fileID: 1110324808}
   - component: {fileID: 1110324809}
+  - component: {fileID: 1110324810}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -3934,7 +4001,38 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyBaguetteDamageUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1110324810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110324806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 1373008449}
+  button: {fileID: 1110324809}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &1159147617
 GameObject:
   m_ObjectHideFlags: 0
@@ -4036,6 +4134,7 @@ MonoBehaviour:
   requirementText: {fileID: 325007386}
   buyButton: {fileID: 133425035}
   buyButtonText: {fileID: 2127872553}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -4129,6 +4228,7 @@ GameObject:
   - component: {fileID: 1189061589}
   - component: {fileID: 1189061591}
   - component: {fileID: 1189061590}
+  - component: {fileID: 1189061592}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -4200,13 +4300,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyJumpUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4220,6 +4320,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189061588}
   m_CullTransparentMesh: 1
+--- !u!114 &1189061592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189061588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 1911407990}
+  button: {fileID: 1189061590}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &1239813775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4941,7 +5060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -514, y: 219}
+  m_AnchoredPosition: {x: -514, y: 196}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1408128092
@@ -5345,6 +5464,7 @@ MonoBehaviour:
   requirementText: {fileID: 877267956}
   buyButton: {fileID: 1189061590}
   buyButtonText: {fileID: 1911407990}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -5525,6 +5645,7 @@ MonoBehaviour:
   requirementText: {fileID: 964857383}
   buyButton: {fileID: 1110324809}
   buyButtonText: {fileID: 1373008449}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -6389,6 +6510,7 @@ MonoBehaviour:
   requirementText: {fileID: 1880951648}
   buyButton: {fileID: 130578712}
   buyButtonText: {fileID: 1679792438}
+  connectBuyButtonAutomatically: 0
   affordableColor: {r: 1, g: 1, b: 1, a: 1}
   unaffordableColor: {r: 1, g: 0, b: 0, a: 1}
   maxedColor: {r: 0, g: 1, b: 0, a: 1}
@@ -6585,8 +6707,10 @@ MonoBehaviour:
   leftArrow: {fileID: 1478461978}
   rightArrow: {fileID: 1432951429}
   buttonText: {fileID: 986315805}
-  normalStyle: 0
-  selectedStyle: 2
+  button: {fileID: 0}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!114 &1731475546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7694,6 +7818,7 @@ GameObject:
   - component: {fileID: 1957350366}
   - component: {fileID: 1957350368}
   - component: {fileID: 1957350367}
+  - component: {fileID: 1957350369}
   m_Layer: 5
   m_Name: Buy
   m_TagString: Untagged
@@ -7765,13 +7890,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 658931415}
+        m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
+        m_MethodName: BuyStaminaUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7785,6 +7910,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957350365}
   m_CullTransparentMesh: 1
+--- !u!114 &1957350369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957350365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1edada85ba0c4e80efffde2cbd5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuButtonVisuals
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
+  buttonText: {fileID: 1780750970}
+  button: {fileID: 1957350367}
+  selectedArrowColor: {r: 1, g: 0.78, b: 0, a: 1}
+  hideArrowsWhenDisabled: 1
+  preventDisabledHoverSelection: 1
 --- !u!1 &2113246373
 GameObject:
   m_ObjectHideFlags: 0

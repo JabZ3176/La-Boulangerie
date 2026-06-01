@@ -21,6 +21,12 @@ public class ShopUpgradeRowUI : MonoBehaviour
     public TextMeshProUGUI buyButtonText;
     #endregion
 
+    #region BUTTON CONNECTION
+    [Header("Button Connection")]
+    [Tooltip("Leave this OFF if you want to wire the Buy button manually in Button > On Click().")]
+    public bool connectBuyButtonAutomatically = false;
+    #endregion
+
     #region COLORS
     [Header("Colors")]
     public Color affordableColor = Color.white;
@@ -45,14 +51,11 @@ public class ShopUpgradeRowUI : MonoBehaviour
         shopManager = manager;
         AutoAssignMissingReferences();
 
-        if (buyButton == null)
+        if (connectBuyButtonAutomatically && buyButton != null)
         {
-            Debug.LogError("ShopUpgradeRowUI on " + gameObject.name + " has no Buy Button assigned.", this);
-            return;
+            buyButton.onClick.RemoveListener(BuyThisUpgrade);
+            buyButton.onClick.AddListener(BuyThisUpgrade);
         }
-
-        buyButton.onClick.RemoveListener(Buy);
-        buyButton.onClick.AddListener(Buy);
 
         if (iconImage != null && icon != null)
             iconImage.sprite = icon;
@@ -97,18 +100,12 @@ public class ShopUpgradeRowUI : MonoBehaviour
             buyButtonText.text = maxed ? "Owned" : "Buy";
     }
 
-    // You can manually assign this to the Button OnClick if needed.
-    public void BuyButtonPressed()
-    {
-        Buy();
-    }
-
-    private void Buy()
+    // Manual OnClick option:
+    // Drag this row GameObject into Button > On Click(), then choose ShopUpgradeRowUI > BuyThisUpgrade().
+    public void BuyThisUpgrade()
     {
         if (shopManager == null)
-        {
             shopManager = Object.FindFirstObjectByType<ShopManager>();
-        }
 
         if (shopManager == null)
         {

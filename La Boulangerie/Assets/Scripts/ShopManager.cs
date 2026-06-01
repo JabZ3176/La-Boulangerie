@@ -58,8 +58,6 @@ public class ShopManager : MonoBehaviour
 
         FindRowsIfNeeded();
         SetupRows();
-
-        LoadCurrency();
         RefreshShop();
     }
     #endregion
@@ -70,17 +68,14 @@ public class ShopManager : MonoBehaviour
         if (upgradeRows != null && upgradeRows.Length > 0) return;
 
         List<ShopUpgradeRowUI> foundRows = new List<ShopUpgradeRowUI>();
-
-        // First check children, in case your rows are under the manager.
         foundRows.AddRange(GetComponentsInChildren<ShopUpgradeRowUI>(true));
 
-        // Then check the whole scene. This fixes the common setup where ShopManager is an empty object
-        // and the upgrade rows are elsewhere under Canvas/ShopPanel/UpgradeListPanel.
 #if UNITY_2023_1_OR_NEWER
         ShopUpgradeRowUI[] allRows = Object.FindObjectsByType<ShopUpgradeRowUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 #else
         ShopUpgradeRowUI[] allRows = Object.FindObjectsOfType<ShopUpgradeRowUI>(true);
 #endif
+
         for (int i = 0; i < allRows.Length; i++)
         {
             if (allRows[i] != null && !foundRows.Contains(allRows[i]))
@@ -103,6 +98,41 @@ public class ShopManager : MonoBehaviour
             if (upgradeRows[i] != null)
                 upgradeRows[i].Setup(this);
         }
+    }
+    #endregion
+
+    #region MANUAL BUY METHODS FOR BUTTON ON CLICK
+    // Drag your ShopManager object into the Button On Click() slot,
+    // then choose one of these methods for the matching Buy button.
+
+    public void BuyHealthUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.Health);
+    }
+
+    public void BuyBaguetteSlotsUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.BaguetteSlots);
+    }
+
+    public void BuyStaminaUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.Stamina);
+    }
+
+    public void BuyMovementUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.Movement);
+    }
+
+    public void BuyJumpUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.Jump);
+    }
+
+    public void BuyBaguetteDamageUpgrade()
+    {
+        BuyUpgrade(ShopUpgradeType.BaguetteDamage);
     }
     #endregion
 
@@ -199,7 +229,11 @@ public class ShopManager : MonoBehaviour
 
         int currentLevel = GetUpgradeLevel(upgradeType);
         int maxLevel = GetMaxLevel(upgradeType);
-        if (currentLevel >= maxLevel) return;
+        if (currentLevel >= maxLevel)
+        {
+            RefreshShop();
+            return;
+        }
 
         UpgradeCost cost = GetUpgradeCost(upgradeType, currentLevel);
         if (!CanAfford(cost))
